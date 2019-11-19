@@ -3,6 +3,7 @@
 
 from __future__ import absolute_import, division, print_function
 from .version import version as __version__  # noqa: F401
+from .connection import I2cConnection  # noqa: F401
 from .linux_i2c_transceiver import LinuxI2cTransceiver  # noqa: F401
 from .command import I2cCommand  # noqa: F401
 from .sensirion_word_command import SensirionWordI2cCommand  # noqa: F401
