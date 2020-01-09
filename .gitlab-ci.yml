@@ -20,8 +20,35 @@ py3p5_64bit_win_build_v1:
   extends: .py3p5_64bit_win_docker_build_v1
 
 
+build_docs:
+  stage: build
+  tags: [linux, docker]
+  image: registry.gitlab.sensirion.lokal/sensirion/docker/docker-python:3.6-18.04-1.1.0
+  script:
+    - apt-get update && apt-get install -y graphviz
+    - python setup.py install
+    - pip install -r docs/requirements.txt
+    - sphinx-versioning build -r "$CI_COMMIT_REF_NAME" docs docs/_build/html
+    - mv docs/_build/html public
+  artifacts:
+    when: always
+    expire_in: 1 week
+    paths: [public]
+
+
 deploy_staging_v1:
   extends: .deploy_staging_v1
 
 deploy_stable_v1:
   extends: .deploy_stable_v1
+
+
+pages:
+  stage: deploy
+  tags: [linux, docker]
+  image: registry.gitlab.sensirion.lokal/sensirion/docker/docker-python:3.6-18.04-1.1.0
+  script:
+    - echo "Publishing documentation..."
+  artifacts:
+    paths: [public]
+  only: [master]
