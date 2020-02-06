@@ -14,4 +14,5 @@ Contents
    installation
    quickstart
    transceivers
+   single_multi_channel
    api
