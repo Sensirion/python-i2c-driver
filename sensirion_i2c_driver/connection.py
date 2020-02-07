@@ -15,37 +15,8 @@ class I2cConnection(object):
     I²C connection class to allow executing I²C commands with a higher-level,
     transceiver-independent API.
 
-    The connection supports two different modes of operation:
-
-    **Single-Channel Mode:**
-
-    The methods :py:meth:`~sensirion_i2c_driver.connection.I2cConnection.read`,
-    :py:meth:`~sensirion_i2c_driver.connection.I2cConnection.write` and
-    :py:meth:`~sensirion_i2c_driver.connection.I2cConnection.execute` return
-    directly the interpreted response of the passed command (e.g. a `float`).
-    If an error occurred during execution, an exception will be raised.
-
-    **Multi-Channel Mode:**
-
-    The methods :py:meth:`~sensirion_i2c_driver.connection.I2cConnection.read`,
-    :py:meth:`~sensirion_i2c_driver.connection.I2cConnection.write` and
-    :py:meth:`~sensirion_i2c_driver.connection.I2cConnection.execute` return
-    a list of responses, one for each channel. A response is either the
-    interpreted data (e.g. a `float`), or an exception object. If an error
-    occurred during execution, an exception will be returned (not raised!)
-    for the corresponding channel, so you are still able to access the
-    responses from successful channels. Note that there might still be an
-    exception raised if it was not possible at all to execute the commands,
-    for example if the I²C transceiver got disconnected from the computer.
-
-    **Choose Mode:**
-
-    Which mode is used depends on the underlying transceiver. A multi-channel
-    transceiver will activate the multi-channel mode, and a single-channel
-    transceiver will activate the single-channel mode. But in case of a
-    single-channel transceiver you can still switch to multi-channel mode
-    with the property
-    :py:attr:`~sensirion_i2c_driver.connection.I2cConnection.always_multi_channel_response`.
+    The connection supports two different modes of operation: Single channel
+    and multi channel. See :ref:`single_multi_channel_mode` for details.
     """
 
     def __init__(self, transceiver):
