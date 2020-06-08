@@ -36,8 +36,7 @@ class I2cConnection(object):
         """
         Set this to True to enforce the behaviour of a multi-channel
         connection, even if a single-channel transceiver is used. In
-        particular, it makes the methods
-        :py:meth:`~sensirion_i2c_driver.connection.I2cConnection.read` and
+        particular, it makes the method
         :py:meth:`~sensirion_i2c_driver.connection.I2cConnection.execute`
         always returning a list, without throwing an exception in case of
         communication errors. This might be useful for applications where
@@ -51,58 +50,9 @@ class I2cConnection(object):
     def always_multi_channel_response(self, value):
         self._always_multi_channel_response = value
 
-    def write(self, slave_address, command):
-        """
-        Perform only the write operation of an I²C command.
-
-        :param byte slave_address:
-            The slave address to which the command should be sent.
-        :param ~sensirion_i2c_driver.command.I2cCommand command:
-            The command to send.
-        :return:
-            - In single channel mode: None
-            - In multi-channel mode: A list containing either None (on success)
-              or an Exception object (on error) for every channel.
-        :raise:
-            In single-channel mode, an exception is raised in case of
-            communication errors.
-        """
-        return self._interpret_response(command, self._transceive(
-            slave_address=slave_address,
-            tx_data=command.tx_data,
-            rx_length=None,
-            read_delay=0,
-            timeout=command.timeout,
-        ))
-
-    def read(self, slave_address, command):
-        """
-        Perform only the read operation of an I²C command.
-
-        :param byte slave_address:
-            The slave address from which the data should be read.
-        :param ~sensirion_i2c_driver.command.I2cCommand command:
-            The command to read.
-        :return:
-            - In single channel mode: The interpreted data of the command.
-            - In multi-channel mode: A list containing either interpreted data
-              of the command (on success) or an Exception object (on error)
-              for every channel.
-        :raise:
-            In single-channel mode, an exception is raised in case of
-            communication errors.
-        """
-        return self._interpret_response(command, self._transceive(
-            slave_address=slave_address,
-            tx_data=None,
-            rx_length=command.rx_length,
-            read_delay=0,
-            timeout=command.timeout,
-        ))
-
     def execute(self, slave_address, command):
         """
-        Perform read and write operations of an I²C command.
+        Perform write and read operations of an I²C command.
 
         :param byte slave_address:
             The slave address of the device to communicate with.

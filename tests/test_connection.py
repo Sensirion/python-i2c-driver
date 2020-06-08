@@ -8,46 +8,6 @@ from mock import MagicMock
 import pytest
 
 
-def test_v1_single_channel_write():
-    transceiver = MagicMock()
-    transceiver.API_VERSION = 1
-    transceiver.channel_count = None
-    transceiver.transceive.return_value = (0, None, b"")
-    connection = I2cConnection(transceiver)
-    response = connection.write(0x42, I2cCommand(b"\x55", 3, 0.1, 0.2))
-    args = [kwargs for args, kwargs in transceiver.transceive.call_args_list]
-    assert args == [
-        {
-            "slave_address": 0x42,
-            "tx_data": b"\x55",
-            "rx_length": None,  # no read!
-            "read_delay": 0.0,  # no read!
-            "timeout": 0.2,
-        },
-    ]
-    assert response is None
-
-
-def test_v1_single_channel_read():
-    transceiver = MagicMock()
-    transceiver.API_VERSION = 1
-    transceiver.channel_count = None
-    transceiver.transceive.return_value = (0, None, b"\x11\x22\x33")
-    connection = I2cConnection(transceiver)
-    response = connection.read(0x42, I2cCommand(b"\x55", 3, 0.1, 0.2))
-    args = [kwargs for args, kwargs in transceiver.transceive.call_args_list]
-    assert args == [
-        {
-            "slave_address": 0x42,
-            "tx_data": None,  # no write!
-            "rx_length": 3,
-            "read_delay": 0.0,  # no write!
-            "timeout": 0.2,
-        },
-    ]
-    assert response == b"\x11\x22\x33"
-
-
 def test_v1_single_channel_execute():
     transceiver = MagicMock()
     transceiver.API_VERSION = 1
