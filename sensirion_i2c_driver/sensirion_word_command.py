@@ -68,7 +68,7 @@ class SensirionWordI2cCommand(I2cCommand):
     def interpret_response(self, data):
         """
         Converts the raw response from the device to words (2 bytes), checks
-        their CRC and retunrs the checked words.
+        their CRC and returns the checked words.
 
         :param bytes data:
             Received raw bytes from the read operation.
