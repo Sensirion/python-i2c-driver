@@ -16,7 +16,6 @@ def test_single_channel_with_connection():
     assert device.connection == connection
     assert device.slave_address == 0x42
     assert device.execute(I2cCommand(b"\x55", 3, 0.1, 0.2)) == b"\x11\x22"
-    assert device.read() == b"\x11\x22"
 
 
 def test_multi_channel():
@@ -25,12 +24,3 @@ def test_multi_channel():
     connection.execute.return_value = ["bar1", "bar2"]
     device = I2cDevice(connection, 0x42)
     assert device.execute(I2cCommand(b"\x55", 3, 0.1, 0.2)) == ["bar1", "bar2"]
-    assert device.read() == ["foo1", "foo2"]
-
-
-def test_single_channel_execute_asynchronous():
-    connection = MagicMock()
-    connection.read.return_value = ["foo1", "foo2"]
-    device = I2cDevice(connection, 0x42)
-    assert device.execute(I2cCommand(b"\x55", 3, 0.1, 0.2), True) is None
-    assert device.read() == ["foo1", "foo2"]

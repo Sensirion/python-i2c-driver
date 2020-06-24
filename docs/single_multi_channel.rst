@@ -13,11 +13,9 @@ Single Channel
 --------------
 
 This mode allows to communicate with a single I²C bus at a time, which is the
-typical use-case. In this mode, the methods
-:py:meth:`~sensirion_i2c_driver.connection.I2cConnection.write`,
-:py:meth:`~sensirion_i2c_driver.connection.I2cConnection.read` and
+typical use-case. In this mode, the method
 :py:meth:`~sensirion_i2c_driver.connection.I2cConnection.execute` of
-:py:class:`~sensirion_i2c_driver.connection.I2cConnection` return directly the
+:py:class:`~sensirion_i2c_driver.connection.I2cConnection` returns directly the
 interpreted response (e.g. a `float`) of the executed command if the operation
 was successful, or raise an exception in case of an error (NACK, timeout, ...).
 
@@ -36,11 +34,9 @@ Multi Channel
 
 In this mode, communication is done concurrently on multiple I²C buses. At
 Sensirion this is often used to execute measurements on multiple sensors at
-the same time. In this mode, the methods
-:py:meth:`~sensirion_i2c_driver.connection.I2cConnection.write`,
-:py:meth:`~sensirion_i2c_driver.connection.I2cConnection.read` and
+the same time. In this mode, the method
 :py:meth:`~sensirion_i2c_driver.connection.I2cConnection.execute` of
-:py:class:`~sensirion_i2c_driver.connection.I2cConnection` return a list
+:py:class:`~sensirion_i2c_driver.connection.I2cConnection` returns a list
 containing the results for each channel. Each result is either the interpreted
 response of the executed command (if successful), or an exception object (in
 case of an error).
