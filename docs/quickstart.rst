@@ -15,7 +15,7 @@ Following example code shows how the driver is intended to use:
         def __init__(self):
             super(MyI2cCmdReadSerialNumber, self).__init__(
                 command=0xD033,
-                tx_words=[],
+                tx_data=[],
                 rx_length=48,
                 read_delay=0,
                 timeout=0,
@@ -23,9 +23,8 @@ Following example code shows how the driver is intended to use:
             )
 
         def interpret_response(self, data):
-            words = SensirionWordI2cCommand.interpret_response(self, data)
-            sn_bytes = pack('>16H', *words)
-            return str(sn_bytes.decode('utf-8').rstrip('\0'))
+            raw_response = SensirionWordI2cCommand.interpret_response(self, data)
+            return str(raw_response.decode('utf-8').rstrip('\0'))
 
 
     # Implement a device
