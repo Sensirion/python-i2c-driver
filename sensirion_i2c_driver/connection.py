@@ -84,8 +84,25 @@ class I2cConnection(object):
             1: self._transceive_v1,
         }
         if self._transceiver.API_VERSION in api_methods_dict:
-            return api_methods_dict[self._transceiver.API_VERSION](
+            # log what command is sent for easier debugging of low level issues
+            log.debug(
+                "I2cConnection send raw: " +
+                "slave_address={} ".format(slave_address) +
+                "rx_length={} ".format(rx_length) +
+                "read_delay={} ".format(read_delay) +
+                "timeout={} ".format(timeout) +
+                "tx_data={}".format(self._data_to_log_string(tx_data))
+            )
+            result = api_methods_dict[self._transceiver.API_VERSION](
                 slave_address, tx_data, rx_length, read_delay, timeout)
+            # log what we received for easier debugging of low level issues
+            if type(result) is list:
+                log.debug("I2cConnection received raw: ({})".format(
+                    ", ".join([self._data_to_log_string(r) for r in result])))
+            else:
+                log.debug("I2cConnection received raw: {}".format(
+                    self._data_to_log_string(result)))
+            return result
         else:
             raise Exception("The I2C transceiver API version {} is not "
                             "supported. You might need to update the "
@@ -162,3 +179,17 @@ class I2cConnection(object):
                 return command.interpret_response(response)
         except Exception as e:
             return e
+
+    def _data_to_log_string(self, data):
+        """
+        Helper function to pretty print TX data or RX data.
+
+        :param data: Data (bytes), None or an exception object.
+        :return: Pretty printed data.
+        :rtype: str
+        """
+        if type(data) is bytes:
+            return "[{}]".format(", ".join(
+                ["0x%.2X" % i for i in bytearray(data)]))
+        else:
+            return str(data)
