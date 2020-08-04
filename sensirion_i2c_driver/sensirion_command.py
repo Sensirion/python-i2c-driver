@@ -7,7 +7,7 @@ from .errors import I2cChecksumError
 from struct import pack
 
 
-class SensirionWordI2cCommand(I2cCommand):
+class SensirionI2cCommand(I2cCommand):
     """
     Base class for Sensirion-specific I²C commands as used in most Sensirion
     sensor devices. This class extends the base class
@@ -22,7 +22,7 @@ class SensirionWordI2cCommand(I2cCommand):
     def __init__(self, command, tx_data, rx_length, read_delay, timeout, crc,
                  command_bytes=2):
         """
-        Constructs a new Sensirion word-oriented I²C command.
+        Constructs a new Sensirion I²C command.
 
         :param int/None command:
             The command ID to be sent to the device. None means that no
@@ -61,7 +61,7 @@ class SensirionWordI2cCommand(I2cCommand):
             command (thus it is the default), but there are also sensors using
             only one byte for the command.
         """
-        super(SensirionWordI2cCommand, self).__init__(
+        super(SensirionI2cCommand, self).__init__(
             tx_data=self._build_tx_data(command, command_bytes, tx_data, crc),
             rx_length=rx_length,
             read_delay=read_delay,
@@ -104,13 +104,13 @@ class SensirionWordI2cCommand(I2cCommand):
         Build the raw bytes to send from given command and TX data.
 
         :param command: See
-            :py:meth:`~sensirion_i2c_driver.sensirion_word_command.SensirionWordI2cCommand.__init__`.
+            :py:meth:`~sensirion_i2c_driver.sensirion_command.SensirionI2cCommand.__init__`.
         :param command_bytes: See
-            :py:meth:`~sensirion_i2c_driver.sensirion_word_command.SensirionWordI2cCommand.__init__`.
+            :py:meth:`~sensirion_i2c_driver.sensirion_command.SensirionI2cCommand.__init__`.
         :param tx_data: See
-            :py:meth:`~sensirion_i2c_driver.sensirion_word_command.SensirionWordI2cCommand.__init__`.
+            :py:meth:`~sensirion_i2c_driver.sensirion_command.SensirionI2cCommand.__init__`.
         :param crc: See
-            :py:meth:`~sensirion_i2c_driver.sensirion_word_command.SensirionWordI2cCommand.__init__`.
+            :py:meth:`~sensirion_i2c_driver.sensirion_command.SensirionI2cCommand.__init__`.
         :return:
             The raw bytes to send, or None if no write header is needed.
         :rtype:

@@ -7,11 +7,11 @@ Following example code shows how the driver is intended to use:
 
     from struct import pack
     from sensirion_i2c_driver import LinuxI2cTransceiver, I2cConnection, \
-        I2cDevice, SensirionWordI2cCommand, CrcCalculator
+        I2cDevice, SensirionI2cCommand, CrcCalculator
 
 
     # Implement a command
-    class MyI2cCmdReadSerialNumber(SensirionWordI2cCommand):
+    class MyI2cCmdReadSerialNumber(SensirionI2cCommand):
         def __init__(self):
             super(MyI2cCmdReadSerialNumber, self).__init__(
                 command=0xD033,
@@ -23,7 +23,7 @@ Following example code shows how the driver is intended to use:
             )
 
         def interpret_response(self, data):
-            raw_response = SensirionWordI2cCommand.interpret_response(self, data)
+            raw_response = SensirionI2cCommand.interpret_response(self, data)
             return str(raw_response.decode('utf-8').rstrip('\0'))
 
 

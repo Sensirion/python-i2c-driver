@@ -32,10 +32,10 @@ I2cCommand
 .. automodule:: sensirion_i2c_driver.command
 
 
-SensirionWordI2cCommand
------------------------
+SensirionI2cCommand
+-------------------
 
-.. automodule:: sensirion_i2c_driver.sensirion_word_command
+.. automodule:: sensirion_i2c_driver.sensirion_command
 
 
 CrcCalculator
