@@ -5,6 +5,7 @@ from __future__ import absolute_import, division, print_function
 from .errors import I2cTransceiveError, I2cChannelDisabledError, \
     I2cNackError, I2cTimeoutError
 from .transceiver_v1 import I2cTransceiverV1
+import time
 
 import logging
 log = logging.getLogger(__name__)
@@ -50,14 +51,18 @@ class I2cConnection(object):
     def always_multi_channel_response(self, value):
         self._always_multi_channel_response = value
 
-    def execute(self, slave_address, command):
+    def execute(self, slave_address, command, wait_post_process=True):
         """
-        Perform write and read operations of an I²C command.
+        Perform write and read operations of an I²C command and wait for
+        the post processing time, if needed.
 
         :param byte slave_address:
             The slave address of the device to communicate with.
         :param ~sensirion_i2c_driver.command.I2cCommand command:
             The command to execute.
+        :param bool wait_post_process:
+            If ``True`` and the passed command needs some time for post
+            processing, this method waits until post processing is done.
         :return:
             - In single channel mode: The interpreted data of the command.
             - In multi-channel mode: A list containing either interpreted data
@@ -67,13 +72,18 @@ class I2cConnection(object):
             In single-channel mode, an exception is raised in case of
             communication errors.
         """
-        return self._interpret_response(command, self._transceive(
+        response = self._transceive(
             slave_address=slave_address,
             tx_data=command.tx_data,
             rx_length=command.rx_length,
             read_delay=command.read_delay,
             timeout=command.timeout,
-        ))
+        )
+        if wait_post_process and command.post_processing_time > 0.0:
+            # Wait for post processing in the device (to be sure the device is
+            # ready for receiving the next command).
+            time.sleep(command.post_processing_time)
+        return self._interpret_response(command, response)
 
     def _transceive(self, slave_address, tx_data, rx_length, read_delay,
                     timeout):

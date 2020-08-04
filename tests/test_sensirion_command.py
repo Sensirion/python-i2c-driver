@@ -76,6 +76,27 @@ def test_command_and_tx_data():
     assert cmd.timeout == 0.2
 
 
+def test_post_processing_time_defaults_to_zero():
+    cmd = SensirionI2cCommand(0x1337, b"\xDE\xAD\xBE\xEF", 5, 0.1, 0.2,
+                              CrcCalculator(8, 0x31, 0xFF), 2)
+    assert type(cmd.post_processing_time) is float
+    assert cmd.post_processing_time == 0.0
+
+
+def test_post_processing_time_int():
+    cmd = SensirionI2cCommand(0x1337, b"\xDE\xAD\xBE\xEF", 5, 0.1, 0.2,
+                              CrcCalculator(8, 0x31, 0xFF), 2, 5)
+    assert type(cmd.post_processing_time) is float
+    assert cmd.post_processing_time == 5.0
+
+
+def test_post_processing_time_float():
+    cmd = SensirionI2cCommand(0x1337, b"\xDE\xAD\xBE\xEF", 5, 0.1, 0.2,
+                              CrcCalculator(8, 0x31, 0xFF), 2, 2.3)
+    assert type(cmd.post_processing_time) is float
+    assert cmd.post_processing_time == 2.3
+
+
 def test_interpret_response_empty():
     cmd = SensirionI2cCommand(None, None, 0, 0.1, 0.2,
                               CrcCalculator(8, 0x31, 0xFF))
