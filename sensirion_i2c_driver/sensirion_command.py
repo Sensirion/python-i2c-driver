@@ -20,7 +20,7 @@ class SensirionI2cCommand(I2cCommand):
     """
 
     def __init__(self, command, tx_data, rx_length, read_delay, timeout, crc,
-                 command_bytes=2):
+                 command_bytes=2, post_processing_time=0.0):
         """
         Constructs a new Sensirion I²C command.
 
@@ -60,12 +60,19 @@ class SensirionI2cCommand(I2cCommand):
             Number of command bytes. Most Sensirion sensors use a 2-byte
             command (thus it is the default), but there are also sensors using
             only one byte for the command.
+        :param float post_processing_time:
+            Maximum time in seconds the device needs for post processing of
+            this command until it is ready to receive the next command. For
+            example after a device reset command, the device might need some
+            time until it is ready again. Usually this is 0.0s, i.e. no post
+            processing is needed.
         """
         super(SensirionI2cCommand, self).__init__(
             tx_data=self._build_tx_data(command, command_bytes, tx_data, crc),
             rx_length=rx_length,
             read_delay=read_delay,
             timeout=timeout,
+            post_processing_time=post_processing_time,
         )
         self._crc = crc
 

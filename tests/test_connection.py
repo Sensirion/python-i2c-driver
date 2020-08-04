@@ -82,3 +82,25 @@ def test_v1_multi_channel_execute():
     assert len(response) == 2
     assert response[0] == b"\x11\x22\x33"
     assert type(response[1]) is I2cNackError
+
+
+def test_v1_single_channel_execute_wait_post_process_true():
+    transceiver = MagicMock()
+    transceiver.API_VERSION = 1
+    transceiver.channel_count = None
+    transceiver.transceive.return_value = (0, None, b"\x11\x22\x33")
+    connection = I2cConnection(transceiver)
+    response = connection.execute(0x42, I2cCommand(b"\x55", 3, 0.1, 0.2, 0.1),
+                                  wait_post_process=True)
+    assert response == b"\x11\x22\x33"
+
+
+def test_v1_single_channel_execute_wait_post_process_false():
+    transceiver = MagicMock()
+    transceiver.API_VERSION = 1
+    transceiver.channel_count = None
+    transceiver.transceive.return_value = (0, None, b"\x11\x22\x33")
+    connection = I2cConnection(transceiver)
+    response = connection.execute(0x42, I2cCommand(b"\x55", 3, 0.1, 0.2, 0.1),
+                                  wait_post_process=False)
+    assert response == b"\x11\x22\x33"

@@ -9,7 +9,8 @@ class I2cCommand(object):
     Base class for all I²C commands.
     """
 
-    def __init__(self, tx_data, rx_length, read_delay, timeout):
+    def __init__(self, tx_data, rx_length, read_delay, timeout,
+                 post_processing_time=0.0):
         """
         Constructs a new I²C command.
 
@@ -33,6 +34,12 @@ class I2cCommand(object):
             operation will be aborted with a timeout error. Set to 0.0 to
             indicate that the device will not stretch the clock for this
             command.
+        :param float post_processing_time:
+            Maximum time in seconds the device needs for post processing of
+            this command until it is ready to receive the next command. For
+            example after a device reset command, the device might need some
+            time until it is ready again. Usually this is 0.0s, i.e. no post
+            processing is needed.
         """
         super(I2cCommand, self).__init__()
 
@@ -49,6 +56,9 @@ class I2cCommand(object):
 
         #: Timeout in Seconds for clock stretching (float).
         self.timeout = float(timeout)
+
+        #: Time in Seconds how long the post processing takes (float).
+        self.post_processing_time = float(post_processing_time)
 
     def interpret_response(self, data):
         """
