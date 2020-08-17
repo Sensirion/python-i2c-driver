@@ -9,6 +9,8 @@ This driver (particularly
 modes of operation: single channel and multi channel.
 
 
+.. _single_channel_mode:
+
 Single Channel
 --------------
 
@@ -28,6 +30,8 @@ was successful, or raise an exception in case of an error (NACK, timeout, ...).
 
     # result contains e.g. "BEEF"
 
+
+.. _multi_channel_mode:
 
 Multi Channel
 -------------
