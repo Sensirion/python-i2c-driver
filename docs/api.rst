@@ -42,3 +42,11 @@ CrcCalculator
 -------------
 
 .. automodule:: sensirion_i2c_driver.crc_calculator
+
+
+Exceptions
+----------
+
+.. inheritance-diagram:: sensirion_i2c_driver.errors
+
+.. automodule:: sensirion_i2c_driver.errors
