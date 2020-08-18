@@ -51,10 +51,40 @@ class I2cConnection(object):
     def always_multi_channel_response(self, value):
         self._always_multi_channel_response = value
 
+    @property
+    def is_multi_channel(self):
+        """
+        Check whether
+        :py:meth:`~sensirion_i2c_driver.connection.I2cConnection.execute` will
+        return a single-channel or multi-channel response.
+
+        A multi-channel response is returned if either
+        :py:attr:`~sensirion_i2c_driver.connection.I2cConnection.always_multi_channel_response`
+        is set to ``True``, or the underlying transceiver is multi-channel.
+
+        :return: True if multi-channel, False if single-channel.
+        :rtype: Bool
+        """
+        if self._transceiver.API_VERSION == 1:
+            return (self._always_multi_channel_response) or \
+                (self._transceiver.channel_count is not None)
+        else:
+            raise Exception("The I2C transceiver API version {} is not "
+                            "supported. You might need to update the "
+                            "sensirion-i2c-driver package.".format(
+                                self._transceiver.API_VERSION))
+
     def execute(self, slave_address, command, wait_post_process=True):
         """
         Perform write and read operations of an I²C command and wait for
         the post processing time, if needed.
+
+        .. note::
+
+            The response data type of this method depends on whether this is a
+            single-channel or multi-channel connection. This can be determined
+            by reading the property
+            :py:attr:`~sensirion_i2c_driver.connection.I2cConnection.is_multi_channel`.
 
         :param byte slave_address:
             The slave address of the device to communicate with.

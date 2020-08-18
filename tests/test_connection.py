@@ -8,6 +8,61 @@ from mock import MagicMock
 import pytest
 
 
+def test_always_multi_channel_response_default_false():
+    transceiver = MagicMock()
+    connection = I2cConnection(transceiver)
+    assert connection.always_multi_channel_response is False
+
+
+def test_always_multi_channel_response_get_set():
+    transceiver = MagicMock()
+    connection = I2cConnection(transceiver)
+    connection.always_multi_channel_response = True
+    assert connection.always_multi_channel_response is True
+
+
+def test_v1_single_channel_is_multi_channel():
+    transceiver = MagicMock()
+    transceiver.API_VERSION = 1
+    transceiver.channel_count = None  # single channel
+    connection = I2cConnection(transceiver)
+    assert connection.is_multi_channel is False
+
+
+def test_v1_multi_channel_is_multi_channel():
+    transceiver = MagicMock()
+    transceiver.API_VERSION = 1
+    transceiver.channel_count = 1  # multi channel
+    connection = I2cConnection(transceiver)
+    assert connection.is_multi_channel is True
+
+
+def test_v1_single_channel_but_always_multi_is_multi_channel():
+    transceiver = MagicMock()
+    transceiver.API_VERSION = 1
+    transceiver.channel_count = None  # single channel
+    connection = I2cConnection(transceiver)
+    connection.always_multi_channel_response = True
+    assert connection.is_multi_channel is True
+
+
+def test_v1_multi_channel_and_always_multi_is_multi_channel():
+    transceiver = MagicMock()
+    transceiver.API_VERSION = 1
+    transceiver.channel_count = 3  # multi channel
+    connection = I2cConnection(transceiver)
+    connection.always_multi_channel_response = True
+    assert connection.is_multi_channel is True
+
+
+def test_is_multi_channel_with_unsupported_api_version():
+    transceiver = MagicMock()
+    transceiver.API_VERSION = 99  # unsupported
+    connection = I2cConnection(transceiver)
+    with pytest.raises(Exception, match=r".*not supported.*"):
+        connection.is_multi_channel
+
+
 def test_v1_single_channel_execute():
     transceiver = MagicMock()
     transceiver.API_VERSION = 1

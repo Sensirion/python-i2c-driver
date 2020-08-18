@@ -98,3 +98,19 @@ property.
     result = device.get_serial_number()  # command returning a string
 
     # result contains e.g. ['BEEF']
+
+
+Determine Mode
+--------------
+
+To determine whether an
+:py:class:`~sensirion_i2c_driver.connection.I2cConnection` is in single channel
+or multi channel mode, the property
+:py:attr:`~sensirion_i2c_driver.connection.I2cConnection.is_multi_channel`
+can be read. On a :py:class:`~sensirion_i2c_driver.device.I2cDevice` object,
+it can be read as following:
+
+.. sourcecode:: python
+
+    device = MyI2cDevice(I2cConnection(transceiver))
+    multi_channel = device.connection.is_multi_channel
