@@ -15,5 +15,6 @@ Contents
    quickstart
    transceivers
    single_multi_channel
+   error_handling
    logging_debugging
    api
