@@ -39,4 +39,4 @@ Following example code shows how the driver is intended to use:
     # Usage
     with LinuxI2cTransceiver('/dev/i2c-1') as transceiver:
         device = MyI2cDevice(I2cConnection(transceiver))
-        print("Serial Number: {}".format(device.get_serial_number()))
+        print("Serial Number: {}".format(device.read_serial_number()))
