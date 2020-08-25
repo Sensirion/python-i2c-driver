@@ -1,0 +1,8 @@
+<map id="inheritance487d49fdd5" name="inheritance487d49fdd5">
+<area shape="rect" id="node1" href="#sensirion_i2c_driver.errors.I2cChannelDisabledError" target="_top" title="I2C channel disabled error." alt="" coords="497,4,764,23"/>
+<area shape="rect" id="node2" href="#sensirion_i2c_driver.errors.I2cTransceiveError" target="_top" title="I2C transceive error." alt="" coords="224,41,461,60"/>
+<area shape="rect" id="node5" href="#sensirion_i2c_driver.errors.I2cNackError" target="_top" title="I2C transceive NACK error." alt="" coords="526,41,735,60"/>
+<area shape="rect" id="node6" href="#sensirion_i2c_driver.errors.I2cTimeoutError" target="_top" title="I2C transceive timeout error." alt="" coords="518,78,743,97"/>
+<area shape="rect" id="node3" href="#sensirion_i2c_driver.errors.I2cChecksumError" target="_top" title="I2C checksum error." alt="" coords="225,78,460,97"/>
+<area shape="rect" id="node4" href="#sensirion_i2c_driver.errors.I2cError" target="_top" title="I2C error base exception." alt="" coords="4,60,189,79"/>
+</map>

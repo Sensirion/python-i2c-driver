@@ -1,0 +1,330 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Single/Multi-Channel Mode &mdash; Sensirion I²C Python Driver 0.2.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+  <link rel="stylesheet" href="_static/banner.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Error Handling" href="error_handling.html" />
+    <link rel="prev" title="Transceivers" href="transceivers.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Sensirion I²C Python Driver
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="transceivers.html">Transceivers</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Single/Multi-Channel Mode</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#single-channel">Single Channel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#multi-channel">Multi Channel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#choose-mode">Choose Mode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#determine-mode">Determine Mode</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="error_handling.html">Error Handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="logging_debugging.html">Logging / Debugging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Sensirion I²C Python Driver</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Single/Multi-Channel Mode</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/single_multi_channel.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="single-multi-channel-mode">
+<span id="id1"></span><h1>Single/Multi-Channel Mode<a class="headerlink" href="#single-multi-channel-mode" title="Permalink to this headline">¶</a></h1>
+<p>This driver (particularly
+<a class="reference internal" href="api.html#sensirion_i2c_driver.connection.I2cConnection" title="sensirion_i2c_driver.connection.I2cConnection"><code class="xref py py-class docutils literal notranslate"><span class="pre">I2cConnection</span></code></a> and
+<a class="reference internal" href="api.html#sensirion_i2c_driver.device.I2cDevice" title="sensirion_i2c_driver.device.I2cDevice"><code class="xref py py-class docutils literal notranslate"><span class="pre">I2cDevice</span></code></a>) supports two different
+modes of operation: single channel and multi channel.</p>
+<div class="section" id="single-channel">
+<span id="single-channel-mode"></span><h2>Single Channel<a class="headerlink" href="#single-channel" title="Permalink to this headline">¶</a></h2>
+<p>This mode allows to communicate with a single I²C bus at a time, which is the
+typical use-case. In this mode, the method
+<a class="reference internal" href="api.html#sensirion_i2c_driver.connection.I2cConnection.execute" title="sensirion_i2c_driver.connection.I2cConnection.execute"><code class="xref py py-meth docutils literal notranslate"><span class="pre">execute()</span></code></a> of
+<a class="reference internal" href="api.html#sensirion_i2c_driver.connection.I2cConnection" title="sensirion_i2c_driver.connection.I2cConnection"><code class="xref py py-class docutils literal notranslate"><span class="pre">I2cConnection</span></code></a> returns directly the
+interpreted response (e.g. a <cite>float</cite>) of the executed command if the operation
+was successful, or raise an exception in case of an error (NACK, timeout, …).</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">device</span> <span class="o">=</span> <span class="n">MyI2cDevice</span><span class="p">(</span><span class="n">I2cConnection</span><span class="p">(</span><span class="n">some_single_channel_transceiver</span><span class="p">))</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">get_serial_number</span><span class="p">()</span>  <span class="c1"># command returning a string</span>
+
+<span class="c1"># result contains e.g. &quot;BEEF&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="multi-channel">
+<span id="multi-channel-mode"></span><h2>Multi Channel<a class="headerlink" href="#multi-channel" title="Permalink to this headline">¶</a></h2>
+<p>In this mode, communication is done concurrently on multiple I²C buses. At
+Sensirion this is often used to execute measurements on multiple sensors at
+the same time. In this mode, the method
+<a class="reference internal" href="api.html#sensirion_i2c_driver.connection.I2cConnection.execute" title="sensirion_i2c_driver.connection.I2cConnection.execute"><code class="xref py py-meth docutils literal notranslate"><span class="pre">execute()</span></code></a> of
+<a class="reference internal" href="api.html#sensirion_i2c_driver.connection.I2cConnection" title="sensirion_i2c_driver.connection.I2cConnection"><code class="xref py py-class docutils literal notranslate"><span class="pre">I2cConnection</span></code></a> returns a list
+containing the results for each channel. Each result is either the interpreted
+response of the executed command (if successful), or an exception object (in
+case of an error).</p>
+<p><strong>In contrast to the single channel mode, no exception is raised in case of
+I²C errors!</strong> This way you still get the results from successful channels if
+errors occurred on some of the channels, but you’ll have to check the results
+by yourself. Especially for commands which do not return any data, you still
+have to check the returned results to ensure the commands were executed
+successfully.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Even though the mentioned methods will not raise an exception in
+case of I²C errors, they may still raise an exception if for some
+reason the commands could not be executed at all, for example if the
+I²C transceiver got disconnected from the computer.</p>
+</div>
+<p><strong>Example:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">device</span> <span class="o">=</span> <span class="n">MyI2cDevice</span><span class="p">(</span><span class="n">I2cConnection</span><span class="p">(</span><span class="n">some_multi_channel_transceiver</span><span class="p">))</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">get_serial_number</span><span class="p">()</span>  <span class="c1"># command returning a string</span>
+
+<span class="c1"># result contains e.g. [&quot;DEAD&quot;, &quot;BEEF&quot;, I2cTimeoutError()]</span>
+<span class="c1">#  -&gt; read serial number from I²C bus 0: &quot;DEAD&quot;</span>
+<span class="c1">#  -&gt; read serial number from I²C bus 1: &quot;BEEF&quot;</span>
+<span class="c1">#  -&gt; read serial number from I²C bus 2 failed with timeout error</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="choose-mode">
+<h2>Choose Mode<a class="headerlink" href="#choose-mode" title="Permalink to this headline">¶</a></h2>
+<p>Which mode is used depends on the underlying
+<a class="reference internal" href="transceivers.html#transceivers"><span class="std std-ref">I²C transceiver</span></a>. A multi channel transceiver will activate
+the multi channel mode, and a single channel transceiver will activate the
+single channel mode.</p>
+<p>But in some cases it might be easier to always have the same API, independent
+of whether a multi- or single channel transceiver is used. Then you can
+enforce to always use multi channel responses with the property
+<a class="reference internal" href="api.html#sensirion_i2c_driver.connection.I2cConnection.always_multi_channel_response" title="sensirion_i2c_driver.connection.I2cConnection.always_multi_channel_response"><code class="xref py py-attr docutils literal notranslate"><span class="pre">always_multi_channel_response</span></code></a>
+of <a class="reference internal" href="api.html#sensirion_i2c_driver.connection.I2cConnection" title="sensirion_i2c_driver.connection.I2cConnection"><code class="xref py py-class docutils literal notranslate"><span class="pre">I2cConnection</span></code></a>. For single
+channel transceivers, the result will then always be a list containing one
+item. The behavior of multi channel transceivers is not affected by this
+property.</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">connection</span> <span class="o">=</span> <span class="n">I2cConnection</span><span class="p">(</span><span class="n">some_single_channel_transceiver</span><span class="p">)</span>
+<span class="n">connection</span><span class="o">.</span><span class="n">always_multi_channel_response</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1"># &lt;-- here</span>
+<span class="n">device</span> <span class="o">=</span> <span class="n">MyI2cDevice</span><span class="p">(</span><span class="n">connection</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">get_serial_number</span><span class="p">()</span>  <span class="c1"># command returning a string</span>
+
+<span class="c1"># result contains e.g. [&#39;BEEF&#39;]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="determine-mode">
+<h2>Determine Mode<a class="headerlink" href="#determine-mode" title="Permalink to this headline">¶</a></h2>
+<p>To determine whether an
+<a class="reference internal" href="api.html#sensirion_i2c_driver.connection.I2cConnection" title="sensirion_i2c_driver.connection.I2cConnection"><code class="xref py py-class docutils literal notranslate"><span class="pre">I2cConnection</span></code></a> is in single channel
+or multi channel mode, the property
+<a class="reference internal" href="api.html#sensirion_i2c_driver.connection.I2cConnection.is_multi_channel" title="sensirion_i2c_driver.connection.I2cConnection.is_multi_channel"><code class="xref py py-attr docutils literal notranslate"><span class="pre">is_multi_channel</span></code></a>
+can be read. On a <a class="reference internal" href="api.html#sensirion_i2c_driver.device.I2cDevice" title="sensirion_i2c_driver.device.I2cDevice"><code class="xref py py-class docutils literal notranslate"><span class="pre">I2cDevice</span></code></a> object,
+it can be read as following:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">device</span> <span class="o">=</span> <span class="n">MyI2cDevice</span><span class="p">(</span><span class="n">I2cConnection</span><span class="p">(</span><span class="n">transceiver</span><span class="p">))</span>
+<span class="n">multi_channel</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">is_multi_channel</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="error_handling.html" class="btn btn-neutral float-right" title="Error Handling" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="transceivers.html" class="btn btn-neutral float-left" title="Transceivers" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020 Sensirion AG, Switzerland
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+        <span class="fa fa-book"> Other Versions</span>
+        v: master
+        <span class="fa fa-caret-down"></span>
+    </span>
+    <div class="rst-other-versions">
+        <dl>
+            <dt>Tags</dt>
+            <dd><a href="0.1.0/index.html">0.1.0</a></dd>
+        </dl>
+        <dl>
+            <dt>Branches</dt>
+            <dd><a href="master/single_multi_channel.html">master</a></dd>
+        </dl>
+    </div>
+</div>
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
