@@ -1,0 +1,450 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>sensirion_i2c_driver.connection &mdash; Sensirion I²C Python Driver 0.2.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/banner.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Sensirion I²C Python Driver
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../transceivers.html">Transceivers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Sensirion I²C Python Driver</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>sensirion_i2c_driver.connection</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for sensirion_i2c_driver.connection</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1"># (c) Copyright 2019 Sensirion AG, Switzerland</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">.errors</span> <span class="kn">import</span> <span class="n">I2cTransceiveError</span><span class="p">,</span> <span class="n">I2cChannelDisabledError</span><span class="p">,</span> \
+    <span class="n">I2cNackError</span><span class="p">,</span> <span class="n">I2cTimeoutError</span>
+<span class="kn">from</span> <span class="nn">.transceiver_v1</span> <span class="kn">import</span> <span class="n">I2cTransceiverV1</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="I2cConnection"><a class="viewcode-back" href="../../api.html#sensirion_i2c_driver.connection.I2cConnection">[docs]</a><span class="k">class</span> <span class="nc">I2cConnection</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    I²C connection class to allow executing I²C commands with a higher-level,</span>
+<span class="sd">    transceiver-independent API.</span>
+
+<span class="sd">    The connection supports two different modes of operation: Single channel</span>
+<span class="sd">    and multi channel. See :ref:`single_multi_channel_mode` for details.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="I2cConnection.__init__"><a class="viewcode-back" href="../../api.html#sensirion_i2c_driver.connection.I2cConnection.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">transceiver</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creates an I²C connection object.</span>
+
+<span class="sd">        :param transceiver:</span>
+<span class="sd">            An I²C transceiver object of any API version (type depends on the</span>
+<span class="sd">            used hardware).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">I2cConnection</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_transceiver</span> <span class="o">=</span> <span class="n">transceiver</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_always_multi_channel_response</span> <span class="o">=</span> <span class="kc">False</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">always_multi_channel_response</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set this to True to enforce the behaviour of a multi-channel</span>
+<span class="sd">        connection, even if a single-channel transceiver is used. In</span>
+<span class="sd">        particular, it makes the method</span>
+<span class="sd">        :py:meth:`~sensirion_i2c_driver.connection.I2cConnection.execute`</span>
+<span class="sd">        always returning a list, without throwing an exception in case of</span>
+<span class="sd">        communication errors. This might be useful for applications where</span>
+<span class="sd">        both, single-channel and multi-channel communication is needed.</span>
+
+<span class="sd">        :type: Bool</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_always_multi_channel_response</span>
+
+    <span class="nd">@always_multi_channel_response</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">always_multi_channel_response</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_always_multi_channel_response</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">is_multi_channel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check whether</span>
+<span class="sd">        :py:meth:`~sensirion_i2c_driver.connection.I2cConnection.execute` will</span>
+<span class="sd">        return a single-channel or multi-channel response.</span>
+
+<span class="sd">        A multi-channel response is returned if either</span>
+<span class="sd">        :py:attr:`~sensirion_i2c_driver.connection.I2cConnection.always_multi_channel_response`</span>
+<span class="sd">        is set to ``True``, or the underlying transceiver is multi-channel.</span>
+
+<span class="sd">        :return: True if multi-channel, False if single-channel.</span>
+<span class="sd">        :rtype: Bool</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_transceiver</span><span class="o">.</span><span class="n">API_VERSION</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_always_multi_channel_response</span><span class="p">)</span> <span class="ow">or</span> \
+                <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_transceiver</span><span class="o">.</span><span class="n">channel_count</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The I2C transceiver API version </span><span class="si">{}</span><span class="s2"> is not &quot;</span>
+                            <span class="s2">&quot;supported. You might need to update the &quot;</span>
+                            <span class="s2">&quot;sensirion-i2c-driver package.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">_transceiver</span><span class="o">.</span><span class="n">API_VERSION</span><span class="p">))</span>
+
+<div class="viewcode-block" id="I2cConnection.execute"><a class="viewcode-back" href="../../api.html#sensirion_i2c_driver.connection.I2cConnection.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">slave_address</span><span class="p">,</span> <span class="n">command</span><span class="p">,</span> <span class="n">wait_post_process</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Perform write and read operations of an I²C command and wait for</span>
+<span class="sd">        the post processing time, if needed.</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            The response data type of this method depends on whether this is a</span>
+<span class="sd">            single-channel or multi-channel connection. This can be determined</span>
+<span class="sd">            by reading the property</span>
+<span class="sd">            :py:attr:`~sensirion_i2c_driver.connection.I2cConnection.is_multi_channel`.</span>
+
+<span class="sd">        :param byte slave_address:</span>
+<span class="sd">            The slave address of the device to communicate with.</span>
+<span class="sd">        :param ~sensirion_i2c_driver.command.I2cCommand command:</span>
+<span class="sd">            The command to execute.</span>
+<span class="sd">        :param bool wait_post_process:</span>
+<span class="sd">            If ``True`` and the passed command needs some time for post</span>
+<span class="sd">            processing, this method waits until post processing is done.</span>
+<span class="sd">        :return:</span>
+<span class="sd">            - In single channel mode: The interpreted data of the command.</span>
+<span class="sd">            - In multi-channel mode: A list containing either interpreted data</span>
+<span class="sd">              of the command (on success) or an Exception object (on error)</span>
+<span class="sd">              for every channel.</span>
+<span class="sd">        :raise:</span>
+<span class="sd">            In single-channel mode, an exception is raised in case of</span>
+<span class="sd">            communication errors.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_transceive</span><span class="p">(</span>
+            <span class="n">slave_address</span><span class="o">=</span><span class="n">slave_address</span><span class="p">,</span>
+            <span class="n">tx_data</span><span class="o">=</span><span class="n">command</span><span class="o">.</span><span class="n">tx_data</span><span class="p">,</span>
+            <span class="n">rx_length</span><span class="o">=</span><span class="n">command</span><span class="o">.</span><span class="n">rx_length</span><span class="p">,</span>
+            <span class="n">read_delay</span><span class="o">=</span><span class="n">command</span><span class="o">.</span><span class="n">read_delay</span><span class="p">,</span>
+            <span class="n">timeout</span><span class="o">=</span><span class="n">command</span><span class="o">.</span><span class="n">timeout</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">wait_post_process</span> <span class="ow">and</span> <span class="n">command</span><span class="o">.</span><span class="n">post_processing_time</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">:</span>
+            <span class="c1"># Wait for post processing in the device (to be sure the device is</span>
+            <span class="c1"># ready for receiving the next command).</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">command</span><span class="o">.</span><span class="n">post_processing_time</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_interpret_response</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">response</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_transceive</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">slave_address</span><span class="p">,</span> <span class="n">tx_data</span><span class="p">,</span> <span class="n">rx_length</span><span class="p">,</span> <span class="n">read_delay</span><span class="p">,</span>
+                    <span class="n">timeout</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        API version independent wrapper around the transceiver.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">api_methods_dict</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="mi">1</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_transceive_v1</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_transceiver</span><span class="o">.</span><span class="n">API_VERSION</span> <span class="ow">in</span> <span class="n">api_methods_dict</span><span class="p">:</span>
+            <span class="c1"># log what command is sent for easier debugging of low level issues</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                <span class="s2">&quot;I2cConnection send raw: &quot;</span> <span class="o">+</span>
+                <span class="s2">&quot;slave_address=</span><span class="si">{}</span><span class="s2"> &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">slave_address</span><span class="p">)</span> <span class="o">+</span>
+                <span class="s2">&quot;rx_length=</span><span class="si">{}</span><span class="s2"> &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">rx_length</span><span class="p">)</span> <span class="o">+</span>
+                <span class="s2">&quot;read_delay=</span><span class="si">{}</span><span class="s2"> &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">read_delay</span><span class="p">)</span> <span class="o">+</span>
+                <span class="s2">&quot;timeout=</span><span class="si">{}</span><span class="s2"> &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">timeout</span><span class="p">)</span> <span class="o">+</span>
+                <span class="s2">&quot;tx_data=</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data_to_log_string</span><span class="p">(</span><span class="n">tx_data</span><span class="p">))</span>
+            <span class="p">)</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">api_methods_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_transceiver</span><span class="o">.</span><span class="n">API_VERSION</span><span class="p">](</span>
+                <span class="n">slave_address</span><span class="p">,</span> <span class="n">tx_data</span><span class="p">,</span> <span class="n">rx_length</span><span class="p">,</span> <span class="n">read_delay</span><span class="p">,</span> <span class="n">timeout</span><span class="p">)</span>
+            <span class="c1"># log what we received for easier debugging of low level issues</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;I2cConnection received raw: (</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">_data_to_log_string</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">result</span><span class="p">])))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;I2cConnection received raw: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_data_to_log_string</span><span class="p">(</span><span class="n">result</span><span class="p">)))</span>
+            <span class="k">return</span> <span class="n">result</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The I2C transceiver API version </span><span class="si">{}</span><span class="s2"> is not &quot;</span>
+                            <span class="s2">&quot;supported. You might need to update the &quot;</span>
+                            <span class="s2">&quot;sensirion-i2c-driver package.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">_transceiver</span><span class="o">.</span><span class="n">API_VERSION</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_transceive_v1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">slave_address</span><span class="p">,</span> <span class="n">tx_data</span><span class="p">,</span> <span class="n">rx_length</span><span class="p">,</span> <span class="n">read_delay</span><span class="p">,</span>
+                       <span class="n">timeout</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Helper function to transceive a command with a API V1 transceiver.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_transceiver</span><span class="o">.</span><span class="n">transceive</span><span class="p">(</span>
+            <span class="n">slave_address</span><span class="o">=</span><span class="n">slave_address</span><span class="p">,</span>
+            <span class="n">tx_data</span><span class="o">=</span><span class="n">tx_data</span><span class="p">,</span>
+            <span class="n">rx_length</span><span class="o">=</span><span class="n">rx_length</span><span class="p">,</span>
+            <span class="n">read_delay</span><span class="o">=</span><span class="n">read_delay</span><span class="p">,</span>
+            <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_transceiver</span><span class="o">.</span><span class="n">channel_count</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_convert_result_v1</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">result</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_convert_result_v1</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_convert_result_v1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Helper function to convert the returned data from a API V1 transceiver.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">status</span><span class="p">,</span> <span class="n">error</span><span class="p">,</span> <span class="n">rx_data</span> <span class="o">=</span> <span class="n">result</span>
+        <span class="k">if</span> <span class="n">status</span> <span class="o">==</span> <span class="n">I2cTransceiverV1</span><span class="o">.</span><span class="n">STATUS_OK</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">rx_data</span>
+        <span class="k">elif</span> <span class="n">status</span> <span class="o">==</span> <span class="n">I2cTransceiverV1</span><span class="o">.</span><span class="n">STATUS_CHANNEL_DISABLED</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">I2cChannelDisabledError</span><span class="p">(</span><span class="n">error</span><span class="p">,</span> <span class="n">rx_data</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">status</span> <span class="o">==</span> <span class="n">I2cTransceiverV1</span><span class="o">.</span><span class="n">STATUS_NACK</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">I2cNackError</span><span class="p">(</span><span class="n">error</span><span class="p">,</span> <span class="n">rx_data</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">status</span> <span class="o">==</span> <span class="n">I2cTransceiverV1</span><span class="o">.</span><span class="n">STATUS_TIMEOUT</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">I2cTimeoutError</span><span class="p">(</span><span class="n">error</span><span class="p">,</span> <span class="n">rx_data</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">I2cTransceiveError</span><span class="p">(</span><span class="n">error</span><span class="p">,</span> <span class="n">rx_data</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">error</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_interpret_response</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Helper function to interpret the returned data from the transceiver.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="c1"># It&#39;s a multi channel transceiver -&gt; interpret response of each</span>
+            <span class="c1"># channel separately and return them as a list. Don&#39;t raise</span>
+            <span class="c1"># exceptions to avoid loosing other channels data if one channel</span>
+            <span class="c1"># has an issue.</span>
+            <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_interpret_single_response</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">ch</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="n">response</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_always_multi_channel_response</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="c1"># Interpret the response of a single channel, but return it like a</span>
+            <span class="c1"># multi channel response as a list and without raising exceptions.</span>
+            <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_interpret_single_response</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">response</span><span class="p">)]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Interpret the response of a single channel and raise the</span>
+            <span class="c1"># exception if there is one.</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_interpret_single_response</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">response</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="ne">Exception</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="n">response</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">response</span>
+
+    <span class="k">def</span> <span class="nf">_interpret_single_response</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Helper function to interpret the returned data of a single channel</span>
+<span class="sd">        from the transceiver. Returns either the interpreted response, or</span>
+<span class="sd">        an exception.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="ne">Exception</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">response</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">command</span><span class="o">.</span><span class="n">interpret_response</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">e</span>
+
+    <span class="k">def</span> <span class="nf">_data_to_log_string</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Helper function to pretty print TX data or RX data.</span>
+
+<span class="sd">        :param data: Data (bytes), None or an exception object.</span>
+<span class="sd">        :return: Pretty printed data.</span>
+<span class="sd">        :rtype: str</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">bytes</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;[</span><span class="si">{}</span><span class="s2">]&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                <span class="p">[</span><span class="s2">&quot;0x</span><span class="si">%.2X</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">bytearray</span><span class="p">(</span><span class="n">data</span><span class="p">)]))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">data</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020 Sensirion AG, Switzerland
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+        <span class="fa fa-book"> Other Versions</span>
+        v: 0.1.0
+        <span class="fa fa-caret-down"></span>
+    </span>
+    <div class="rst-other-versions">
+        <dl>
+            <dt>Tags</dt>
+            <dd><a href="connection.html">0.1.0</a></dd>
+        </dl>
+        <dl>
+            <dt>Branches</dt>
+            <dd><a href="../../../master/index.html">master</a></dd>
+        </dl>
+    </div>
+</div>
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

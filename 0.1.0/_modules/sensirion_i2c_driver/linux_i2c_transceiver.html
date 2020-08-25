@@ -1,0 +1,357 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>sensirion_i2c_driver.linux_i2c_transceiver &mdash; Sensirion I²C Python Driver 0.2.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/banner.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Sensirion I²C Python Driver
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../transceivers.html">Transceivers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Sensirion I²C Python Driver</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>sensirion_i2c_driver.linux_i2c_transceiver</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for sensirion_i2c_driver.linux_i2c_transceiver</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1"># (c) Copyright 2019 Sensirion AG, Switzerland</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="LinuxI2cTransceiver"><a class="viewcode-back" href="../../api.html#sensirion_i2c_driver.linux_i2c_transceiver.LinuxI2cTransceiver">[docs]</a><span class="k">class</span> <span class="nc">LinuxI2cTransceiver</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Transceiver for the Linux I²C kernel driver, for example to use the I²C</span>
+<span class="sd">    pins of a Raspberry Pi.</span>
+
+<span class="sd">    .. note:: This class can be used in a &quot;with&quot;-statement, and it&#39;s</span>
+<span class="sd">              recommended to do so as it automatically closes the device file</span>
+<span class="sd">              after using it.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">API_VERSION</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1">#: API version (accessed by I2cConnection)</span>
+
+    <span class="c1"># Status codes</span>
+    <span class="n">STATUS_OK</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1">#: Status code for &quot;transceive operation succeeded&quot;.</span>
+    <span class="n">STATUS_CHANNEL_DISABLED</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1">#: Status code for &quot;channel disabled error&quot;.</span>
+    <span class="n">STATUS_NACK</span> <span class="o">=</span> <span class="mi">2</span>  <span class="c1">#: Status code for &quot;not acknowledged error&quot;.</span>
+    <span class="n">STATUS_TIMEOUT</span> <span class="o">=</span> <span class="mi">3</span>  <span class="c1">#: Status code for &quot;timeout error&quot;.</span>
+    <span class="n">STATUS_UNSPECIFIED_ERROR</span> <span class="o">=</span> <span class="mi">4</span>  <span class="c1">#: Status code for &quot;unspecified error&quot;.</span>
+
+<div class="viewcode-block" id="LinuxI2cTransceiver.__init__"><a class="viewcode-back" href="../../api.html#sensirion_i2c_driver.linux_i2c_transceiver.LinuxI2cTransceiver.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device_file</span><span class="p">,</span> <span class="n">do_open</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a transceiver for a given I²C device file and (optionally) open</span>
+<span class="sd">        it for read/write access.</span>
+
+<span class="sd">        :param str device_file:</span>
+<span class="sd">            Path to the I²C device file, for example &quot;/dev/i2c-1&quot;.</span>
+<span class="sd">        :param bool do_open:</span>
+<span class="sd">            Whether the file should be opened immediately or not. If ``False``,</span>
+<span class="sd">            you will have to call</span>
+<span class="sd">            :py:meth:`~sensirion_i2c_driver.linux_i2c_transceiver.LinuxI2cTransceiver.open`</span>
+<span class="sd">            manually before using the transceiver. Defaults to ``True``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">LinuxI2cTransceiver</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_device_file</span> <span class="o">=</span> <span class="n">device_file</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_file_descriptor</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">do_open</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">open</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_val</span><span class="p">,</span> <span class="n">exc_tb</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+<div class="viewcode-block" id="LinuxI2cTransceiver.open"><a class="viewcode-back" href="../../api.html#sensirion_i2c_driver.linux_i2c_transceiver.LinuxI2cTransceiver.open">[docs]</a>    <span class="k">def</span> <span class="nf">open</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Open the I²C port (only needs to be called if ``do_open`` in</span>
+<span class="sd">        :py:meth:`~sensirion_i2c_driver.linux_i2c_transceiver.LinuxI2cTransceiver.__init__`</span>
+<span class="sd">        was set to ``False``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_file_descriptor</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_device_file</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">O_RDWR</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="LinuxI2cTransceiver.close"><a class="viewcode-back" href="../../api.html#sensirion_i2c_driver.linux_i2c_transceiver.LinuxI2cTransceiver.close">[docs]</a>    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Close (release) the device file.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_file_descriptor</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_file_descriptor</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">description</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Description of the transceiver.</span>
+
+<span class="sd">        For details (e.g. return value documentation), please refer to</span>
+<span class="sd">        :py:attr:`~sensirion_i2c_driver.transceiver_v1.I2cTransceiverV1.description`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_device_file</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">channel_count</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Channel count of this transceiver.</span>
+
+<span class="sd">        For details (e.g. return value documentation), please refer to</span>
+<span class="sd">        :py:attr:`~sensirion_i2c_driver.transceiver_v1.I2cTransceiverV1.channel_count`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="kc">None</span>  <span class="c1"># single channel transceiver</span>
+
+<div class="viewcode-block" id="LinuxI2cTransceiver.transceive"><a class="viewcode-back" href="../../api.html#sensirion_i2c_driver.linux_i2c_transceiver.LinuxI2cTransceiver.transceive">[docs]</a>    <span class="k">def</span> <span class="nf">transceive</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">slave_address</span><span class="p">,</span> <span class="n">tx_data</span><span class="p">,</span> <span class="n">rx_length</span><span class="p">,</span> <span class="n">read_delay</span><span class="p">,</span>
+                   <span class="n">timeout</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Transceive an I²C frame in single-channel mode.</span>
+
+<span class="sd">        For details (e.g. parameter documentation), please refer to</span>
+<span class="sd">        :py:meth:`~sensirion_i2c_driver.transceiver_v1.I2cTransceiverV1.transceive`.</span>
+
+<span class="sd">        .. note::  The ``timeout`` parameter is not supported (i.e. ignored)</span>
+<span class="sd">                   since we can&#39;t specify the clock stretching timeout. It</span>
+<span class="sd">                   depends on the underlying hardware whether clock stretching</span>
+<span class="sd">                   is supported at all or not, and what timeout value is used.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="nb">type</span><span class="p">(</span><span class="n">slave_address</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">int</span>
+        <span class="k">assert</span> <span class="p">(</span><span class="n">tx_data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">tx_data</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">bytes</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="p">(</span><span class="n">rx_length</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">rx_length</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">int</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">type</span><span class="p">(</span><span class="n">read_delay</span><span class="p">)</span> <span class="ow">in</span> <span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span>
+        <span class="k">assert</span> <span class="nb">type</span><span class="p">(</span><span class="n">timeout</span><span class="p">)</span> <span class="ow">in</span> <span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span>
+
+        <span class="c1"># Delayed import to avoid errors when importing this module on Windows</span>
+        <span class="kn">from</span> <span class="nn">fcntl</span> <span class="kn">import</span> <span class="n">ioctl</span>
+
+        <span class="n">status</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">STATUS_OK</span>
+        <span class="n">error</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">rx_data</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;&quot;</span>
+
+        <span class="c1"># Set address</span>
+        <span class="c1"># See https://www.kernel.org/doc/html/latest/i2c/dev-interface.html</span>
+        <span class="n">ioctl</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_file_descriptor</span><span class="p">,</span> <span class="mh">0x0703</span><span class="p">,</span> <span class="n">slave_address</span><span class="p">)</span>
+
+        <span class="c1"># I2C Write</span>
+        <span class="k">if</span> <span class="n">tx_data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_file_descriptor</span><span class="p">,</span> <span class="n">tx_data</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">status</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">STATUS_UNSPECIFIED_ERROR</span>
+                <span class="n">error</span> <span class="o">=</span> <span class="n">e</span>
+
+        <span class="c1"># Since we use separate commands for write and read, we have to</span>
+        <span class="c1"># implement the read delay in software</span>
+        <span class="k">if</span> <span class="n">read_delay</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">read_delay</span><span class="p">)</span>
+
+        <span class="c1"># I2C Read</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">rx_length</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">status</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">STATUS_OK</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">rx_data</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_file_descriptor</span><span class="p">,</span> <span class="n">rx_length</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">status</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">STATUS_UNSPECIFIED_ERROR</span>
+                <span class="n">error</span> <span class="o">=</span> <span class="n">e</span>
+
+        <span class="k">return</span> <span class="n">status</span><span class="p">,</span> <span class="n">error</span><span class="p">,</span> <span class="n">rx_data</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020 Sensirion AG, Switzerland
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+        <span class="fa fa-book"> Other Versions</span>
+        v: 0.1.0
+        <span class="fa fa-caret-down"></span>
+    </span>
+    <div class="rst-other-versions">
+        <dl>
+            <dt>Tags</dt>
+            <dd><a href="linux_i2c_transceiver.html">0.1.0</a></dd>
+        </dl>
+        <dl>
+            <dt>Branches</dt>
+            <dd><a href="../../../master/index.html">master</a></dd>
+        </dl>
+    </div>
+</div>
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
