@@ -12,6 +12,12 @@ https://sensirion.github.io/python-i2c-driver/.
 
 ## Development
 
+We develop and test this driver using our company internal tools (version
+control, continuous integration, code review etc.) and automatically
+synchronize the `master` branch with GitHub. But this doesn't mean that we
+don't respond to issues or don't accept pull requests on GitHub. In fact,
+you're very welcome to open issues or create pull requests :)
+
 ### Check coding style
 
 The coding style can be checked with [`flake8`](http://flake8.pycqa.org/):
