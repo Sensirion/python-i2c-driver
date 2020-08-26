@@ -3,6 +3,13 @@ Quick Start
 
 Following example code shows how the driver is intended to use:
 
+.. note::
+
+    This is just a short example to get an idea how the driver is used.
+    If you plan to implement a new device driver, please also read the
+    :ref:`guidelines for implementing device drivers <device_driver_guidelines>`.
+
+
 .. sourcecode:: python
 
     from struct import pack
