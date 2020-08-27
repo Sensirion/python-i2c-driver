@@ -31,7 +31,7 @@ setup(
     description='Base Driver for Communicating With I2C Devices',
     license='BSD',
     keywords='sensirion i2c driver',
-    url='http://developers.sensirion.com',
+    url='https://github.com/sensirion/python-i2c-driver',
     packages=find_packages(exclude=['tests', 'tests.*']),
     long_description=long_description,
     python_requires='>=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, <4',
