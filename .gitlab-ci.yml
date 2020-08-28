@@ -21,19 +21,17 @@ py3p5_64bit_win_build_v1:
 
 
 build_docs:
-  stage: build
-  tags: [linux, docker]
-  image: registry.gitlab.sensirion.lokal/sensirion/docker/docker-python:3.6-18.04-1.1.0
+  extends: .build_docs_v1
   script:
     - apt-get update && apt-get install -y graphviz
     - python setup.py install
     - pip install -r docs/requirements.txt
-    - sphinx-versioning build -r "$CI_COMMIT_REF_NAME" docs docs/_build/html
-    - mv docs/_build/html public
+    - ./ci/set_git_config.sh
+    - sphinx-versioning build -r "$CI_COMMIT_REF_NAME" -w "$CI_COMMIT_REF_NAME" docs docs/_build/html
   artifacts:
-    when: always
+    paths: [docs/_build]
     expire_in: 1 week
-    paths: [public]
+    when: always
 
 
 deploy_staging_v1:
@@ -41,14 +39,27 @@ deploy_staging_v1:
 
 deploy_stable_v1:
   extends: .deploy_stable_v1
+  environment:
+    name: pypi.org
+    url: https://pypi.org/project/sensirion-i2c-driver/
+  before_script:
+    - pip install twine~=1.12.1
+  script:
+    - PKG_VERSION=$(python setup.py --version --quiet | tail -n1)
+    - TAG_VERSION=$(git describe --tags)
+    - if [ "$TAG_VERSION" != "$PKG_VERSION" ]; then echo "Tag Version ($TAG_VERSION) != Package Version ($PKG_VERSION)" && exit 1; fi
+    - twine upload dist/*
 
 
-pages:
+deploy_docs:
   stage: deploy
   tags: [linux, docker]
   image: registry.gitlab.sensirion.lokal/sensirion/docker/docker-python:3.6-18.04-1.1.0
+  dependencies: []
+  only: [master, tags]
   script:
-    - echo "Publishing documentation..."
-  artifacts:
-    paths: [public]
-  only: [master]
+    - apt-get update && apt-get install -y graphviz
+    - python setup.py install
+    - pip install -r docs/requirements.txt
+    - ./ci/set_git_config.sh
+    - sphinx-versioning push docs gh-pages .

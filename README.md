@@ -7,10 +7,16 @@ sensor drivers. For details, please read the package description in
 
 ## Usage
 
-See package description in [README.rst](README.rst).
-
+See package description in [README.rst](README.rst) and user manual at
+https://sensirion.github.io/python-i2c-driver/.
 
 ## Development
+
+We develop and test this driver using our company internal tools (version
+control, continuous integration, code review etc.) and automatically
+synchronize the `master` branch with GitHub. But this doesn't mean that we
+don't respond to issues or don't accept pull requests on GitHub. In fact,
+you're very welcome to open issues or create pull requests :)
 
 ### Check coding style
 
