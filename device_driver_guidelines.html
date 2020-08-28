@@ -1,0 +1,556 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Device Driver Guidelines &mdash; Sensirion I²C Python Driver 0.2.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+  <link rel="stylesheet" href="_static/banner.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="API Reference" href="api.html" />
+    <link rel="prev" title="Logging / Debugging" href="logging_debugging.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Sensirion I²C Python Driver
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="transceivers.html">Transceivers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="single_multi_channel.html">Single/Multi-Channel Mode</a></li>
+<li class="toctree-l1"><a class="reference internal" href="error_handling.html">Error Handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="logging_debugging.html">Logging / Debugging</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Device Driver Guidelines</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#directory-structure">Directory Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#command-base-class">Command Base Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#command-tx-rx-data-types">Command TX/RX Data Types</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pass-through-raw-values">Pass-Through Raw Values</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#physical-value-conversion">Physical Value Conversion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#response-data-types">Response Data Types</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#device-class">Device Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#api-example">API Example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Sensirion I²C Python Driver</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Device Driver Guidelines</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/device_driver_guidelines.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="device-driver-guidelines">
+<span id="id1"></span><h1>Device Driver Guidelines<a class="headerlink" href="#device-driver-guidelines" title="Permalink to this headline">¶</a></h1>
+<p>To help ensuring consistency between the various I²C device drivers, this page
+defines some guidelines how device drivers should be designed. It is highly
+recommended to follow these guidelines when creating a new device driver.</p>
+<div class="section" id="directory-structure">
+<h2>Directory Structure<a class="headerlink" href="#directory-structure" title="Permalink to this headline">¶</a></h2>
+<p>It is recommended that each device driver contains (at least) the following
+two files:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">commands.py</span></code>: Containing all I²C command classes (derived from
+<a class="reference internal" href="api.html#sensirion_i2c_driver.command.I2cCommand" title="sensirion_i2c_driver.command.I2cCommand"><code class="xref py py-class docutils literal notranslate"><span class="pre">I2cCommand</span></code></a>).</li>
+<li><code class="docutils literal notranslate"><span class="pre">device.py</span></code>: Containing one device class (derived from
+<a class="reference internal" href="api.html#sensirion_i2c_driver.device.I2cDevice" title="sensirion_i2c_driver.device.I2cDevice"><code class="xref py py-class docutils literal notranslate"><span class="pre">I2cDevice</span></code></a>) to wrap each command by
+a method.</li>
+</ul>
+<p>If a Python package contains drivers for multiple I²C devices, create
+(possibly nested) subdirectories for them, for example like that:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>sensirion_i2c_sht
+    ├── sht2x
+    │   ├── commands.py
+    │   └── device.py
+    ├── sht3x
+    │   ├── commands.py
+    │   └── device.py
+    └── shtc3
+        ├── commands.py
+        └── device.py
+</pre></div>
+</div>
+<p>In addition, it’s often handy to also add a <code class="docutils literal notranslate"><span class="pre">__init__.py</span></code> file to each
+directory to re-export the classes so the user doesn’t need to care about the
+module names (e.g. allow importing <code class="docutils literal notranslate"><span class="pre">Sht3xI2cDevice</span></code> instead of
+<code class="docutils literal notranslate"><span class="pre">device.Sht3xI2cDevice</span></code>).</p>
+</div>
+<div class="section" id="command-base-class">
+<h2>Command Base Class<a class="headerlink" href="#command-base-class" title="Permalink to this headline">¶</a></h2>
+<p>Within <code class="docutils literal notranslate"><span class="pre">commands.py</span></code>, there should be a command class added which is then
+inherited by each command of the particular device. This is useful to specify
+the communication parameters which are common to all commands, for example the
+CRC argorithm. This is how such a class could look like:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sensirion_i2c_driver</span> <span class="kn">import</span> <span class="n">SensirionI2cCommand</span><span class="p">,</span> <span class="n">CrcCalculator</span>
+
+<span class="k">class</span> <span class="nc">Sht3xI2cCmdBase</span><span class="p">(</span><span class="n">SensirionI2cCommand</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command</span><span class="p">,</span> <span class="n">tx_data</span><span class="p">,</span> <span class="n">rx_length</span><span class="p">,</span> <span class="n">read_delay</span><span class="p">,</span> <span class="n">timeout</span><span class="p">,</span>
+                 <span class="n">post_processing_time</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Sht3xI2cCmdBase</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">command</span><span class="o">=</span><span class="n">command</span><span class="p">,</span>
+            <span class="n">tx_data</span><span class="o">=</span><span class="n">tx_data</span><span class="p">,</span>
+            <span class="n">rx_length</span><span class="o">=</span><span class="n">rx_length</span><span class="p">,</span>
+            <span class="n">read_delay</span><span class="o">=</span><span class="n">read_delay</span><span class="p">,</span>
+            <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">,</span>
+            <span class="n">crc</span><span class="o">=</span><span class="n">CrcCalculator</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mh">0x31</span><span class="p">,</span> <span class="mh">0xFF</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">),</span>
+            <span class="n">command_bytes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+            <span class="n">post_processing_time</span><span class="o">=</span><span class="n">post_processing_time</span><span class="p">,</span>
+        <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="command-tx-rx-data-types">
+<h2>Command TX/RX Data Types<a class="headerlink" href="#command-tx-rx-data-types" title="Permalink to this headline">¶</a></h2>
+<p>Sometimes it’s not easy to decide what type should be passed to the command
+constructor (data written to the device) or returned by the
+<a class="reference internal" href="api.html#sensirion_i2c_driver.command.I2cCommand.interpret_response" title="sensirion_i2c_driver.command.I2cCommand.interpret_response"><code class="xref py py-meth docutils literal notranslate"><span class="pre">interpret_response()</span></code></a> method
+(data received from the device), respectively what physical unit these values
+should have. For example, physical values are often transferred over I²C as
+integers with a specific scaling and offset to get suitable resolution, but
+humans usually prefer to work with a standard physical unit.</p>
+<p>To help deciding how to implement it, here some possible solutions:</p>
+<div class="section" id="pass-through-raw-values">
+<h3>Pass-Through Raw Values<a class="headerlink" href="#pass-through-raw-values" title="Permalink to this headline">¶</a></h3>
+<p>This variant is recommended if the value represents no physical unit or has no
+offset and scaling.</p>
+<p>Examples:</p>
+<ul class="simple">
+<li>Measure interval in Milliseconds (e.g. <code class="docutils literal notranslate"><span class="pre">5</span></code> represents 5 ms)</li>
+<li>Serial number as a string (no physical unit)</li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">struct</span> <span class="kn">import</span> <span class="n">pack</span><span class="p">,</span> <span class="n">unpack</span>
+
+<span class="k">class</span> <span class="nc">Sht3xI2cCmdSimpleExample</span><span class="p">(</span><span class="n">Sht3xI2cCmdBase</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">measure_interval_ms</span><span class="p">,</span> <span class="n">delay_ms</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Sht3xI2cCmdSimpleExample</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">tx_data</span><span class="o">=</span><span class="n">pack</span><span class="p">(</span><span class="s2">&quot;&gt;HH&quot;</span><span class="p">,</span> <span class="n">measure_interval_ms</span><span class="p">,</span> <span class="n">delay_ms</span><span class="p">),</span>
+            <span class="n">rx_length</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">read_delay</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">interpret_response</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="c1"># when deriving from SensirionI2cCommand, check and remove CRCs now</span>
+        <span class="n">checked_data</span> <span class="o">=</span> <span class="n">SensirionI2cCommand</span><span class="o">.</span><span class="n">interpret_response</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+        <span class="c1"># return measure_interval_ms and delay_ms as a tuple(int, int)</span>
+        <span class="k">return</span> <span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;&gt;HH&quot;</span><span class="p">,</span> <span class="n">checked_data</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="physical-value-conversion">
+<h3>Physical Value Conversion<a class="headerlink" href="#physical-value-conversion" title="Permalink to this headline">¶</a></h3>
+<p>If the value has a physical meaning but is transmitted with an offset and/or
+scale factor, it’s recommended to create a separate class to convert between
+the underlying raw value and its physical value.</p>
+<p>Example: Temperature transmitted as integers, with scale and offset.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">struct</span> <span class="kn">import</span> <span class="n">pack</span><span class="p">,</span> <span class="n">unpack</span>
+
+<span class="k">class</span> <span class="nc">Sht3xTemperature</span><span class="p">():</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ticks</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ticks</span> <span class="o">=</span> <span class="n">ticks</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">degree_celsius</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ticks</span> <span class="o">/</span> <span class="mf">100.0</span><span class="p">)</span> <span class="o">-</span> <span class="mf">70.0</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">from_degree_celsius</span><span class="p">(</span><span class="n">temperature</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Sht3xTemperature</span><span class="p">(</span><span class="nb">round</span><span class="p">((</span><span class="n">temperature</span> <span class="o">+</span> <span class="mf">70.0</span><span class="p">)</span> <span class="o">*</span> <span class="mf">100.0</span><span class="p">))</span>
+
+    <span class="c1"># Provide conversion to integer (used in the command class)</span>
+    <span class="k">def</span> <span class="fm">__int__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ticks</span>
+
+    <span class="c1"># Optional: Provide conversion to string, e.g. for printing</span>
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{:.2f}</span><span class="s2"> °C&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">degree_celsius</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">Sht3xI2cCmdDataTypeExample</span><span class="p">(</span><span class="n">Sht3xI2cCmdBase</span><span class="p">):</span>
+    <span class="c1"># Note: The passed parameters can either be simple integers (raw ticks)</span>
+    <span class="c1"># or Sht3xTemperature objects since they provide a conversion to integer.</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t_outside</span><span class="p">,</span> <span class="n">t_inside</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Sht3xI2cCmdDataTypeExample</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">tx_data</span><span class="o">=</span><span class="n">pack</span><span class="p">(</span><span class="s2">&quot;&gt;HH&quot;</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">t_outside</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">t_inside</span><span class="p">)),</span>
+            <span class="n">rx_length</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">read_delay</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">interpret_response</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="c1"># when deriving from SensirionI2cCommand, check and remove CRCs now</span>
+        <span class="n">checked_data</span> <span class="o">=</span> <span class="n">SensirionI2cCommand</span><span class="o">.</span><span class="n">interpret_response</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+        <span class="c1"># return values as tuple(Sht3xTemperature, Sht3xTemperature)</span>
+        <span class="n">t_outside_ticks</span><span class="p">,</span> <span class="n">t_inside_ticks</span> <span class="o">=</span> <span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;&gt;HH&quot;</span><span class="p">,</span> <span class="n">checked_data</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Sht3xTemperature</span><span class="p">(</span><span class="n">t_outside_ticks</span><span class="p">),</span> <span class="n">Sht3xTemperature</span><span class="p">(</span><span class="n">t_inside_ticks</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>These classes (<code class="docutils literal notranslate"><span class="pre">Sht3xTemperature</span></code> in the example above) might be located in
+a module named <code class="docutils literal notranslate"><span class="pre">data_types.py</span></code> within the driver package, and re-exported in
+<code class="docutils literal notranslate"><span class="pre">__init__.py</span></code> to make them easily importable by users.</p>
+</div>
+<div class="section" id="response-data-types">
+<h3>Response Data Types<a class="headerlink" href="#response-data-types" title="Permalink to this headline">¶</a></h3>
+<p>Sometimes a command returns a lot of different values. With the variants
+mentioned above, this would lead
+<a class="reference internal" href="api.html#sensirion_i2c_driver.command.I2cCommand.interpret_response" title="sensirion_i2c_driver.command.I2cCommand.interpret_response"><code class="xref py py-meth docutils literal notranslate"><span class="pre">interpret_response()</span></code></a>
+returning a tuple with many values, which is often cumbersome to use since the
+values are only identified by their position in the tuple (i.e. are not named).</p>
+<p>For such commands, you might consider creating a class to represent the whole
+response data. There is no compulsory criteria when to use this variant or one
+of the previously described variants. But as a rule of thumb, you may use this
+variant if more than three values are returned.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">struct</span> <span class="kn">import</span> <span class="n">unpack</span>
+<span class="kn">from</span> <span class="nn">.data_types</span> <span class="kn">import</span> <span class="n">Sht3xTemperature</span>
+
+<span class="k">class</span> <span class="nc">Sht3xExampleI2cResponse</span><span class="p">():</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rx_data</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rx_data</span> <span class="o">=</span> <span class="n">rx_data</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">measure_interval_ms</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;&gt;H&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rx_data</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">temperature_outside</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Sht3xTemperature</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rx_data</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">4</span><span class="p">])</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">temperature_inside</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Sht3xTemperature</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rx_data</span><span class="p">[</span><span class="mi">4</span><span class="p">:</span><span class="mi">6</span><span class="p">])</span>
+
+    <span class="c1"># Optional: Provide conversion to string, e.g. for printing</span>
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{:.2f}</span><span class="s2"> ms interval, </span><span class="si">{:.2f}</span><span class="s2"> °C outside, </span><span class="si">{:.2f}</span><span class="s2"> °C inside&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">measure_interval_ms</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">temperature_outside</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">temperature_inside</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">Sht3xI2cCmdResponseTypeExample</span><span class="p">(</span><span class="n">Sht3xI2cCmdBase</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Sht3xI2cCmdResponseTypeExample</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">tx_data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rx_length</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">read_delay</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">interpret_response</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="c1"># when deriving from SensirionI2cCommand, check and remove CRCs now</span>
+        <span class="n">checked_data</span> <span class="o">=</span> <span class="n">SensirionI2cCommand</span><span class="o">.</span><span class="n">interpret_response</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+        <span class="c1"># return values as a single Sht3xExampleI2cResponse object</span>
+        <span class="k">return</span> <span class="n">Sht3xExampleI2cResponse</span><span class="p">(</span><span class="n">checked_data</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This even has the advantage that such response classes can easily be shared
+between multiple command classes. For example if there are multiple different
+“read measured values” commands which all return the same data structure,
+you only have to implement the response data class once and every command
+can use it to interpret its response.</p>
+<p>These classes (<code class="docutils literal notranslate"><span class="pre">Sht3xExampleI2cResponse</span></code> in the example above) might be
+located in a module named <code class="docutils literal notranslate"><span class="pre">data_types.py</span></code> within the driver package, and
+re-exported in <code class="docutils literal notranslate"><span class="pre">__init__.py</span></code> to make them easily importable by users.</p>
+</div>
+</div>
+<div class="section" id="device-class">
+<h2>Device Class<a class="headerlink" href="#device-class" title="Permalink to this headline">¶</a></h2>
+<p>The command classes mentioned above are fine to specify the I²C interface of
+each command in an object oriented manner. This is useful for various special
+use-cases, for example to execute I²C commands asynchronously on standalone I²C
+masters, or for offline interpretation of logged raw I²C frames. In addition,
+these command classes might be generated automatically by code generators if
+a machine readable specification of the I²C commands is available.</p>
+<p>But for the typical use-case of synchronously sending commands to a device and
+waiting for the response, it’s not very convenient to work with these command
+classes directly. Therefore device drivers should provide a device class
+(derived from <a class="reference internal" href="api.html#sensirion_i2c_driver.device.I2cDevice" title="sensirion_i2c_driver.device.I2cDevice"><code class="xref py py-class docutils literal notranslate"><span class="pre">I2cDevice</span></code></a>) which is
+basically a thin wrapper around the commands. Typically, each command is
+wrapped by a corresponding method, with no additional logic added.</p>
+<p>Example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sensirion_i2c_driver</span> <span class="kn">import</span> <span class="n">I2cDevice</span>
+<span class="kn">from</span> <span class="nn">.commands</span> <span class="kn">import</span> <span class="n">Sht3xI2cCmdSimpleExample</span><span class="p">,</span> <span class="n">Sht3xI2cCmdDataTypeExample</span><span class="p">,</span> \
+    <span class="n">Sht3xI2cCmdResponseTypeExample</span>
+
+
+<span class="k">class</span> <span class="nc">Sht3xI2cDevice</span><span class="p">(</span><span class="n">I2cDevice</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">connection</span><span class="p">,</span> <span class="n">slave_address</span><span class="o">=</span><span class="mh">0x44</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Sht3xI2cDevice</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span> <span class="n">slave_address</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">simple_example</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">measure_interval_ms</span><span class="p">,</span> <span class="n">delay_ms</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">Sht3xI2cCmdSimpleExample</span><span class="p">(</span><span class="n">measure_interval_ms</span><span class="p">,</span> <span class="n">delay_ms</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">data_type_example</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t_outside</span><span class="p">,</span> <span class="n">t_inside</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">Sht3xI2cCmdDataTypeExample</span><span class="p">(</span><span class="n">t_outside</span><span class="p">,</span> <span class="n">t_inside</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">response_type_example</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">Sht3xI2cCmdResponseExample</span><span class="p">())</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Even if
+<a class="reference internal" href="api.html#sensirion_i2c_driver.command.I2cCommand.interpret_response" title="sensirion_i2c_driver.command.I2cCommand.interpret_response"><code class="xref py py-meth docutils literal notranslate"><span class="pre">interpret_response()</span></code></a> of
+a command does not return any data, you must still return the result of
+<a class="reference internal" href="api.html#sensirion_i2c_driver.device.I2cDevice.execute" title="sensirion_i2c_driver.device.I2cDevice.execute"><code class="xref py py-meth docutils literal notranslate"><span class="pre">execute()</span></code></a>, because in
+multi channel mode this method will return a list containing the
+exception objects if I²C errors occurred.</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p>In some specific cases, it might still make sense to add some additional
+logic to these wrapper methods. Then you should keep in mind that
+<a class="reference internal" href="api.html#sensirion_i2c_driver.device.I2cDevice.execute" title="sensirion_i2c_driver.device.I2cDevice.execute"><code class="xref py py-meth docutils literal notranslate"><span class="pre">execute()</span></code></a> returns a list
+of values in case a multi channel transceiver is used. So you’ll have to
+handle both, single channel return values and multi channel return values.
+Read the property
+<a class="reference internal" href="api.html#sensirion_i2c_driver.connection.I2cConnection.is_multi_channel" title="sensirion_i2c_driver.connection.I2cConnection.is_multi_channel"><code class="xref py py-attr docutils literal notranslate"><span class="pre">is_multi_channel</span></code></a>
+of the underlying
+<a class="reference internal" href="api.html#sensirion_i2c_driver.connection.I2cConnection" title="sensirion_i2c_driver.connection.I2cConnection"><code class="xref py py-class docutils literal notranslate"><span class="pre">I2cConnection</span></code></a> to determine
+whether the returned value is a single- or multi channel response.</p>
+<p>In addition, for multi channel responses, keep in mind that the returned
+values might contain exception objects instead of received data. These need
+to be handled accordingly.</p>
+<p>Example:</p>
+<div class="last highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">simple_example</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">measure_interval_ms</span><span class="p">,</span> <span class="n">delay_ms</span><span class="p">):</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">Sht3xI2cCmdSimpleExample</span><span class="p">(</span><span class="n">measure_interval_ms</span><span class="p">,</span> <span class="n">delay_ms</span><span class="p">))</span>
+
+    <span class="c1"># Multiply all received values by 2</span>
+    <span class="n">operation</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="ne">Exception</span><span class="p">)</span> <span class="k">else</span> <span class="n">x</span> <span class="o">*</span> <span class="mi">2</span>  <span class="c1"># skip errors</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">is_multi_channel</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">operation</span><span class="p">,</span> <span class="n">result</span><span class="p">))</span>  <span class="c1"># convert result of each channel</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">operation</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>  <span class="c1"># convert the single channel result</span>
+
+    <span class="k">return</span> <span class="n">result</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="api-example">
+<h2>API Example<a class="headerlink" href="#api-example" title="Permalink to this headline">¶</a></h2>
+<p>From the user perspective, the API of such a device driver might look as
+following:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sensirion_i2c_sht.sht3x</span> <span class="kn">import</span> <span class="n">Sht3xI2cDevice</span><span class="p">,</span> <span class="n">Sht3xTemperature</span>
+<span class="kn">from</span> <span class="nn">sensirion_i2c_sht.sht3x.commands</span> <span class="kn">import</span> <span class="n">Sht3xI2cCmdSimpleExample</span>
+
+<span class="n">device</span> <span class="o">=</span> <span class="n">Sht3xI2cDevice</span><span class="p">(</span><span class="n">my_i2c_connection</span><span class="p">)</span>
+
+<span class="c1"># Simple example: Passed and returned data types are integers.</span>
+<span class="n">measure_interval_ms</span><span class="p">,</span> <span class="n">delay_ms</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">simple_example</span><span class="p">(</span><span class="mi">1337</span><span class="p">,</span> <span class="mi">42</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Interval: </span><span class="si">{}</span><span class="s2"> ms, Delay: </span><span class="si">{}</span><span class="s2"> ms&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">measure_interval_ms</span><span class="p">,</span> <span class="n">delay_ms</span><span class="p">))</span>
+
+<span class="c1"># Data type example: Passed data types are either integer or Sht3xTemperature</span>
+<span class="c1"># objects, returned data types are always Sht3xTemperature objects.</span>
+<span class="n">t_outside</span><span class="p">,</span> <span class="n">t_inside</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">data_type_example</span><span class="p">(</span><span class="mi">42</span><span class="p">,</span> <span class="n">Sht3xTemperature</span><span class="o">.</span><span class="n">from_degree_celsius</span><span class="p">(</span><span class="mf">25.0</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Temperature outside: </span><span class="si">{}</span><span class="s2"> °C&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">t_outside</span><span class="o">.</span><span class="n">degree_celsius</span><span class="p">))</span>  <span class="c1"># explicit</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Temperature inside: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">t_inside</span><span class="p">))</span>  <span class="c1"># Using __str__() operator</span>
+
+<span class="c1"># Response type example: Returned data type is Sht3xExampleI2cResponse</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">response_type_example</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Interval: </span><span class="si">{}</span><span class="s2"> ms&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">measure_interval_ms</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Temperature outside: </span><span class="si">{}</span><span class="s2"> °C&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">temperature_outside</span><span class="o">.</span><span class="n">degree_celsius</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Temperature inside: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">temperature_inside</span><span class="p">))</span>
+
+<span class="c1"># Direct use of command classes, e.g. to interpret offline data</span>
+<span class="n">cmd</span> <span class="o">=</span> <span class="n">Sht3xI2cCmdSimpleExample</span><span class="p">()</span>
+<span class="n">raw_received_data</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x00\x09\x09\x3A\x80\xA7</span><span class="s2">&quot;</span>
+<span class="n">measure_interval_ms</span><span class="p">,</span> <span class="n">delay_ms</span> <span class="o">=</span> <span class="n">cmd</span><span class="o">.</span><span class="n">interpret_response</span><span class="p">(</span><span class="n">raw_received_data</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="api.html" class="btn btn-neutral float-right" title="API Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="logging_debugging.html" class="btn btn-neutral float-left" title="Logging / Debugging" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020 Sensirion AG, Switzerland
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+        <span class="fa fa-book"> Other Versions</span>
+        v: master
+        <span class="fa fa-caret-down"></span>
+    </span>
+    <div class="rst-other-versions">
+        <dl>
+            <dt>Tags</dt>
+            <dd><a href="0.1.0/index.html">0.1.0</a></dd>
+        </dl>
+        <dl>
+            <dt>Branches</dt>
+            <dd><a href="master/device_driver_guidelines.html">master</a></dd>
+        </dl>
+    </div>
+</div>
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

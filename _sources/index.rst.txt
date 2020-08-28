@@ -17,4 +17,5 @@ Contents
    single_multi_channel
    error_handling
    logging_debugging
+   device_driver_guidelines
    api

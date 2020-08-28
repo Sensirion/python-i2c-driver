@@ -95,6 +95,7 @@
 <li class="toctree-l1"><a class="reference internal" href="single_multi_channel.html">Single/Multi-Channel Mode</a></li>
 <li class="toctree-l1"><a class="reference internal" href="error_handling.html">Error Handling</a></li>
 <li class="toctree-l1"><a class="reference internal" href="logging_debugging.html">Logging / Debugging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="device_driver_guidelines.html">Device Driver Guidelines</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
 </ul>
 
@@ -163,6 +164,12 @@
   <div class="section" id="quick-start">
 <h1>Quick Start<a class="headerlink" href="#quick-start" title="Permalink to this headline">¶</a></h1>
 <p>Following example code shows how the driver is intended to use:</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This is just a short example to get an idea how the driver is used.
+If you plan to implement a new device driver, please also read the
+<a class="reference internal" href="device_driver_guidelines.html#device-driver-guidelines"><span class="std std-ref">guidelines for implementing device drivers</span></a>.</p>
+</div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">struct</span> <span class="kn">import</span> <span class="n">pack</span>
 <span class="kn">from</span> <span class="nn">sensirion_i2c_driver</span> <span class="kn">import</span> <span class="n">LinuxI2cTransceiver</span><span class="p">,</span> <span class="n">I2cConnection</span><span class="p">,</span> \
     <span class="n">I2cDevice</span><span class="p">,</span> <span class="n">SensirionI2cCommand</span><span class="p">,</span> <span class="n">CrcCalculator</span>
