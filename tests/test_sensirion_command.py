@@ -71,7 +71,7 @@ def test_command_and_tx_data():
                               CrcCalculator(8, 0x31, 0xFF))
     assert type(cmd.tx_data) is bytes
     assert cmd.tx_data == b"\x13\x37\xDE\xAD\x98\xBE\xEF\x92"
-    assert cmd.rx_length is 5
+    assert cmd.rx_length == 5
     assert cmd.read_delay == 0.1
     assert cmd.timeout == 0.2
 
@@ -140,6 +140,6 @@ def test_single_byte_command():
                               CrcCalculator(8, 0x31, 0xFF), 1)
     assert type(cmd.tx_data) is bytes
     assert cmd.tx_data == b"\x42\xDE\xAD\x98\xBE\xEF\x92"
-    assert cmd.rx_length is 5
+    assert cmd.rx_length == 5
     assert cmd.read_delay == 0.1
     assert cmd.timeout == 0.2
