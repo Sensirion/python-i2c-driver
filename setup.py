@@ -26,8 +26,8 @@ long_description = readme.strip() + "\n\n" + changelog.strip() + "\n"
 setup(
     name='sensirion-i2c-driver',
     version=version_string,
-    author='Urban Bruhin',
-    author_email='urban.bruhin@sensirion.com',
+    author='Sensirion',
+    author_email='info@sensirion.com',
     description='Base Driver for Communicating With I2C Devices',
     license='BSD',
     keywords='sensirion i2c driver',
@@ -39,10 +39,10 @@ setup(
     ],
     extras_require={
         'test': [
-            'flake8~=3.6.0',
+            'flake8~=3.7.8',
             'mock~=3.0.0',
-            'pytest~=3.10.0',
-            'pytest-cov~=2.6.0',
+            'pytest~=4.6.11',
+            'pytest-cov~=2.12.1',
         ]
     },
     classifiers=[
@@ -52,6 +52,9 @@ setup(
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.10',
         'Topic :: System :: Hardware :: Hardware Drivers'
     ]
 )
