@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>sensirion_i2c_driver.sensirion_command &mdash; Sensirion I²C Python Driver 1.0.1 documentation</title>
+  <title>sensirion_i2c_driver.sensirion_command &mdash; sensirion-i2c-driver 1.0.1 documentation</title>
   
 
   
@@ -52,7 +52,7 @@
           
 
           
-            <a href="../../index.html" class="icon icon-home"> Sensirion I²C Python Driver
+            <a href="../../index.html" class="icon icon-home"> sensirion-i2c-driver
           
 
           
@@ -109,7 +109,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">Sensirion I²C Python Driver</a>
+          <a href="../../index.html">sensirion-i2c-driver</a>
         
       </nav>
 
@@ -168,7 +168,7 @@
 
 
 <div class="viewcode-block" id="SensirionI2cCommand"><a class="viewcode-back" href="../../api.html#sensirion_i2c_driver.sensirion_command.SensirionI2cCommand">[docs]</a><span class="k">class</span> <span class="nc">SensirionI2cCommand</span><span class="p">(</span><span class="n">I2cCommand</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Base class for Sensirion-specific I²C commands as used in most Sensirion</span>
 <span class="sd">    sensor devices. This class extends the base class</span>
 <span class="sd">    :py:class:`~sensirion_i2c_driver.command.I2cCommand` with following</span>
@@ -181,7 +181,7 @@
 
 <div class="viewcode-block" id="SensirionI2cCommand.__init__"><a class="viewcode-back" href="../../api.html#sensirion_i2c_driver.sensirion_command.SensirionI2cCommand.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command</span><span class="p">,</span> <span class="n">tx_data</span><span class="p">,</span> <span class="n">rx_length</span><span class="p">,</span> <span class="n">read_delay</span><span class="p">,</span> <span class="n">timeout</span><span class="p">,</span> <span class="n">crc</span><span class="p">,</span>
                  <span class="n">command_bytes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">post_processing_time</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Constructs a new Sensirion I²C command.</span>
 
 <span class="sd">        :param int/None command:</span>
@@ -237,7 +237,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_crc</span> <span class="o">=</span> <span class="n">crc</span></div>
 
 <div class="viewcode-block" id="SensirionI2cCommand.interpret_response"><a class="viewcode-back" href="../../api.html#sensirion_i2c_driver.sensirion_command.SensirionI2cCommand.interpret_response">[docs]</a>    <span class="k">def</span> <span class="nf">interpret_response</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Validates the CRCs of the received data from the device and returns</span>
 <span class="sd">        the data with all CRCs removed.</span>
 
@@ -267,7 +267,7 @@
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_build_tx_data</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">command_bytes</span><span class="p">,</span> <span class="n">tx_data</span><span class="p">,</span> <span class="n">crc</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Build the raw bytes to send from given command and TX data.</span>
 
 <span class="sd">        :param command: See</span>
@@ -309,7 +309,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2021 Sensirion AG, Switzerland
+        &copy; Copyright 2024 Sensirion AG, Switzerland
 
     </p>
   </div>

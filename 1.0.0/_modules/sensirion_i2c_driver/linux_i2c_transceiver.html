@@ -170,7 +170,7 @@
 
 
 <div class="viewcode-block" id="LinuxI2cTransceiver"><a class="viewcode-back" href="../../api.html#sensirion_i2c_driver.linux_i2c_transceiver.LinuxI2cTransceiver">[docs]</a><span class="k">class</span> <span class="nc">LinuxI2cTransceiver</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Transceiver for the Linux I²C kernel driver, for example to use the I²C</span>
 <span class="sd">    pins of a Raspberry Pi.</span>
 
@@ -189,7 +189,7 @@
     <span class="n">STATUS_UNSPECIFIED_ERROR</span> <span class="o">=</span> <span class="mi">4</span>  <span class="c1">#: Status code for &quot;unspecified error&quot;.</span>
 
 <div class="viewcode-block" id="LinuxI2cTransceiver.__init__"><a class="viewcode-back" href="../../api.html#sensirion_i2c_driver.linux_i2c_transceiver.LinuxI2cTransceiver.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device_file</span><span class="p">,</span> <span class="n">do_open</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create a transceiver for a given I²C device file and (optionally) open</span>
 <span class="sd">        it for read/write access.</span>
 
@@ -214,7 +214,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
 <div class="viewcode-block" id="LinuxI2cTransceiver.open"><a class="viewcode-back" href="../../api.html#sensirion_i2c_driver.linux_i2c_transceiver.LinuxI2cTransceiver.open">[docs]</a>    <span class="k">def</span> <span class="nf">open</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Open the I²C port (only needs to be called if ``do_open`` in</span>
 <span class="sd">        :py:meth:`~sensirion_i2c_driver.linux_i2c_transceiver.LinuxI2cTransceiver.__init__`</span>
 <span class="sd">        was set to ``False``.</span>
@@ -222,7 +222,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_file_descriptor</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_device_file</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">O_RDWR</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="LinuxI2cTransceiver.close"><a class="viewcode-back" href="../../api.html#sensirion_i2c_driver.linux_i2c_transceiver.LinuxI2cTransceiver.close">[docs]</a>    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Close (release) the device file.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">os</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_file_descriptor</span><span class="p">)</span>
@@ -230,7 +230,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">description</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Description of the transceiver.</span>
 
 <span class="sd">        For details (e.g. return value documentation), please refer to</span>
@@ -240,7 +240,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">channel_count</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Channel count of this transceiver.</span>
 
 <span class="sd">        For details (e.g. return value documentation), please refer to</span>
@@ -250,7 +250,7 @@
 
 <div class="viewcode-block" id="LinuxI2cTransceiver.transceive"><a class="viewcode-back" href="../../api.html#sensirion_i2c_driver.linux_i2c_transceiver.LinuxI2cTransceiver.transceive">[docs]</a>    <span class="k">def</span> <span class="nf">transceive</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">slave_address</span><span class="p">,</span> <span class="n">tx_data</span><span class="p">,</span> <span class="n">rx_length</span><span class="p">,</span> <span class="n">read_delay</span><span class="p">,</span>
                    <span class="n">timeout</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Transceive an I²C frame in single-channel mode.</span>
 
 <span class="sd">        For details (e.g. parameter documentation), please refer to</span>
@@ -312,7 +312,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2021 Sensirion AG, Switzerland
+        &copy; Copyright 2024 Sensirion AG, Switzerland
 
     </p>
   </div>

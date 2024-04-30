@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>sensirion_i2c_driver.errors &mdash; Sensirion I²C Python Driver 1.0.1 documentation</title>
+  <title>sensirion_i2c_driver.errors &mdash; sensirion-i2c-driver 1.0.1 documentation</title>
   
 
   
@@ -52,7 +52,7 @@
           
 
           
-            <a href="../../index.html" class="icon icon-home"> Sensirion I²C Python Driver
+            <a href="../../index.html" class="icon icon-home"> sensirion-i2c-driver
           
 
           
@@ -109,7 +109,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">Sensirion I²C Python Driver</a>
+          <a href="../../index.html">sensirion-i2c-driver</a>
         
       </nav>
 
@@ -168,7 +168,7 @@
 
 
 <div class="viewcode-block" id="I2cError"><a class="viewcode-back" href="../../api.html#sensirion_i2c_driver.errors.I2cError">[docs]</a><span class="k">class</span> <span class="nc">I2cError</span><span class="p">(</span><span class="ne">IOError</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    I2C error base exception.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="I2cError.__init__"><a class="viewcode-back" href="../../api.html#sensirion_i2c_driver.errors.I2cError.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">received_data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="s2">&quot;I2C error.&quot;</span><span class="p">):</span>
@@ -178,7 +178,7 @@
 
 
 <div class="viewcode-block" id="I2cChecksumError"><a class="viewcode-back" href="../../api.html#sensirion_i2c_driver.errors.I2cChecksumError">[docs]</a><span class="k">class</span> <span class="nc">I2cChecksumError</span><span class="p">(</span><span class="n">I2cError</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    I2C checksum error.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="I2cChecksumError.__init__"><a class="viewcode-back" href="../../api.html#sensirion_i2c_driver.errors.I2cChecksumError.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">received_checksum</span><span class="p">,</span> <span class="n">expected_checksum</span><span class="p">,</span> <span class="n">received_data</span><span class="p">):</span>
@@ -192,7 +192,7 @@
 
 
 <div class="viewcode-block" id="I2cTransceiveError"><a class="viewcode-back" href="../../api.html#sensirion_i2c_driver.errors.I2cTransceiveError">[docs]</a><span class="k">class</span> <span class="nc">I2cTransceiveError</span><span class="p">(</span><span class="n">I2cError</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    I2C transceive error.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="I2cTransceiveError.__init__"><a class="viewcode-back" href="../../api.html#sensirion_i2c_driver.errors.I2cTransceiveError.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">transceiver_error</span><span class="p">,</span> <span class="n">received_data</span><span class="p">,</span>
@@ -205,7 +205,7 @@
 
 
 <div class="viewcode-block" id="I2cChannelDisabledError"><a class="viewcode-back" href="../../api.html#sensirion_i2c_driver.errors.I2cChannelDisabledError">[docs]</a><span class="k">class</span> <span class="nc">I2cChannelDisabledError</span><span class="p">(</span><span class="n">I2cTransceiveError</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    I2C channel disabled error.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="I2cChannelDisabledError.__init__"><a class="viewcode-back" href="../../api.html#sensirion_i2c_driver.errors.I2cChannelDisabledError.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">transceiver_error</span><span class="p">,</span> <span class="n">received_data</span><span class="p">):</span>
@@ -217,7 +217,7 @@
 
 
 <div class="viewcode-block" id="I2cNackError"><a class="viewcode-back" href="../../api.html#sensirion_i2c_driver.errors.I2cNackError">[docs]</a><span class="k">class</span> <span class="nc">I2cNackError</span><span class="p">(</span><span class="n">I2cTransceiveError</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    I2C transceive NACK error.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="I2cNackError.__init__"><a class="viewcode-back" href="../../api.html#sensirion_i2c_driver.errors.I2cNackError.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">transceiver_error</span><span class="p">,</span> <span class="n">received_data</span><span class="p">):</span>
@@ -229,7 +229,7 @@
 
 
 <div class="viewcode-block" id="I2cTimeoutError"><a class="viewcode-back" href="../../api.html#sensirion_i2c_driver.errors.I2cTimeoutError">[docs]</a><span class="k">class</span> <span class="nc">I2cTimeoutError</span><span class="p">(</span><span class="n">I2cTransceiveError</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    I2C transceive timeout error.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="I2cTimeoutError.__init__"><a class="viewcode-back" href="../../api.html#sensirion_i2c_driver.errors.I2cTimeoutError.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">transceiver_error</span><span class="p">,</span> <span class="n">received_data</span><span class="p">):</span>
@@ -250,7 +250,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2021 Sensirion AG, Switzerland
+        &copy; Copyright 2024 Sensirion AG, Switzerland
 
     </p>
   </div>

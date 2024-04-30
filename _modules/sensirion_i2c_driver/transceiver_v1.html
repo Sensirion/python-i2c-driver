@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>sensirion_i2c_driver.transceiver_v1 &mdash; Sensirion I²C Python Driver 1.0.1 documentation</title>
+  <title>sensirion_i2c_driver.transceiver_v1 &mdash; sensirion-i2c-driver 1.0.1 documentation</title>
   
 
   
@@ -52,7 +52,7 @@
           
 
           
-            <a href="../../index.html" class="icon icon-home"> Sensirion I²C Python Driver
+            <a href="../../index.html" class="icon icon-home"> sensirion-i2c-driver
           
 
           
@@ -109,7 +109,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">Sensirion I²C Python Driver</a>
+          <a href="../../index.html">sensirion-i2c-driver</a>
         
       </nav>
 
@@ -168,7 +168,7 @@
 
 
 <div class="viewcode-block" id="I2cTransceiverV1"><a class="viewcode-back" href="../../api.html#sensirion_i2c_driver.transceiver_v1.I2cTransceiverV1">[docs]</a><span class="k">class</span> <span class="nc">I2cTransceiverV1</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Interface to be implemented by every I²C transceiver with API version 1.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -186,7 +186,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">description</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Description of the transceiver (for logging/debugging purposes).</span>
 <span class="sd">        Should be a short one-line string.</span>
 
@@ -197,7 +197,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">channel_count</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Channel count of this transceiver. This is needed by</span>
 <span class="sd">        :py:class:`~sensirion_i2c_driver.connection.I2cConnection` to determine</span>
 <span class="sd">        whether this is a single-channel or multi-channel transceiver, and how</span>
@@ -212,7 +212,7 @@
 
 <div class="viewcode-block" id="I2cTransceiverV1.transceive"><a class="viewcode-back" href="../../api.html#sensirion_i2c_driver.transceiver_v1.I2cTransceiverV1.transceive">[docs]</a>    <span class="k">def</span> <span class="nf">transceive</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">slave_address</span><span class="p">,</span> <span class="n">tx_data</span><span class="p">,</span> <span class="n">rx_length</span><span class="p">,</span> <span class="n">read_delay</span><span class="p">,</span>
                    <span class="n">timeout</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Transceive an I²C frame synchronously.</span>
 
 <span class="sd">        :param byte slave_address:</span>
@@ -261,7 +261,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2021 Sensirion AG, Switzerland
+        &copy; Copyright 2024 Sensirion AG, Switzerland
 
     </p>
   </div>
