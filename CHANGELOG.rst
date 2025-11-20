@@ -1,6 +1,10 @@
 CHANGELOG
 ---------
 
+1.0.1
+:::::
+- Update project structure
+
 1.0.0
 :::::
 - First public release
