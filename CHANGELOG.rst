@@ -1,6 +1,11 @@
 CHANGELOG
 ---------
 
+1.0.2
+:::::
+- Fix CI
+- Fix links in README.md
+
 1.0.1
 :::::
 - Update project structure

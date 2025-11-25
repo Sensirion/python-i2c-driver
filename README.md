@@ -2,12 +2,12 @@
 
 This repository contains the common I2C driver used by various Sensirion
 sensor drivers. For details, please read the package description in
-[README.rst](README.rst).
+[README.rst](https://github.com/Sensirion/python-i2c-driver/blob/master/README.rst).
 
 
 ## Usage
 
-See package description in [README.rst](README.rst) and user manual at
+See package description in [README.rst](https://github.com/Sensirion/python-i2c-driver/blob/master/README.rst) and user manual at
 https://sensirion.github.io/python-i2c-driver/.
 
 ## Development
@@ -57,4 +57,4 @@ sphinx-versioning build docs docs/_build/html  # Build documentation
 
 ## License
 
-See [LICENSE](LICENSE).
+See [LICENSE](https://github.com/Sensirion/python-i2c-driver/blob/master/LICENSE).
